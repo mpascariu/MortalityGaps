@@ -1,6 +1,6 @@
 # Doble-Gap Forecasting Model (beta version)
 -----------------------------------
-[![Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
+[![Build Status]([![Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
 [![issues](https://img.shields.io/github/issues-raw/mpascariu/DoubleGap.svg)]()
 [![license](https://img.shields.io/github/license/mpascariu/DoubleGap.svg)]()
 
