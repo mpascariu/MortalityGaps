@@ -2,7 +2,8 @@
 title: "DoubleGap R Package"
 author: "Marius Pascariu"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
+  # rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Vignette --- DoubleGap R package}
   %\VignetteEngine{knitr::rmarkdown}

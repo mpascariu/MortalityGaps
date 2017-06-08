@@ -1,4 +1,4 @@
-# Doble-Gap Forecasting Model (beta version)
+# Double-Gap Forecasting Model (beta version)
 [![Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
 
 This repository contains the source code for the Double-Gap model for forecasting life expectancy in different populations. 

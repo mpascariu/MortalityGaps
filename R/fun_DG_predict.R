@@ -76,7 +76,9 @@ predict.DoubleGap <- function(object, last_forecast_year,
                      h = h_, iter, ci, 
                      cou = object$data_input$country)
     
-    out <- list(pred.values = results, pred.intervals = CI)
+    out <- structure(class = 'predict.DoubleGap',
+                     list(pred.values = results, 
+                          pred.intervals = CI))
     return(out)  
   })
 }
