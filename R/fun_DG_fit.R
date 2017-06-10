@@ -92,7 +92,7 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
   # Output object
   out <- structure(class = 'DoubleGap',
                    list(data = dta, coefficients = coef, 
-                        fitted.values = fv, observed.values = fv, 
+                        fitted.values = fv, observed.values = ov, 
                         residuals = res, model.parts = parts))
   out$call <- match.call()
   return(out)
