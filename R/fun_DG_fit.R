@@ -23,6 +23,31 @@
 #' # Not yet.
 #' @importFrom stats lm fitted.values
 #' @author Marius Pascariu
+#' @examples 
+#' 
+#' rm(list = ls())
+#' library(DoubleGap)
+#' 
+#' country = "SWE"
+#' years = 1950:2014
+#' 
+#' # Fit model
+#' dgm <- DoubleGap(LT_female = hmdlt$LTF, 
+#'                   LT_male = hmdlt$LTM, 
+#'                   age = 0, 
+#'                   country = country, 
+#'                   years = years, 
+#'                   arima.order = c(2, 1, 1), 
+#'                   drift = TRUE, 
+#'                   tau = 75, 
+#'                   A = 86)
+#' ls(dgm)
+#' summary(dgm)
+#' 
+#' # Predict model ----------------------------------------------
+#' 
+#' fc_DGM <- predict(dgm, last_forecast_year = 2050, 
+#'                   iter = 500, ci = c(0.8, 0.95))
 #' @export
 #' 
 DoubleGap <- function(LT_female, LT_male, age = 0, country, years, 
@@ -30,35 +55,55 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
                       tau = NULL, A = NULL) {
   
   input <- c(as.list(environment())) # save for later use
-  dta   <- prepare.data(input) # preliminary data preparation
-  table_w_records <- find.record.ex(data = dta)
+  dta   <- prepare_data(input) # preliminary data preparation
+  dta$record.life.expectancy.data <- find_record_ex(data = dta)
   
-  # Fit linear model for best practice life expectancy
-  t_ = dta$time_index1
-  fit_bp <- lm(table_w_records$ex ~ t_)
+  # M1: Fit linear model for best practice life expectancy
+  year = dta$time_index1
+  fit_bp <- lm(dta$record.life.expectancy.data$ex ~ year)
   
-  # Fit best-practice gap model
+  # M2: Fit best-practice gap model
   fit_bp_gap <- bp_gap.model(data = dta, 
                              benchmark = fitted.values(fit_bp),
                              arima.order,
                              drift)
-  # Fit sex-gap model
+  # M3: Fit sex-gap model
   fit_sex_gap <- sex_gap.model(dta)
+  
+  # coefficients
+  coef = list(bp_model = fit_bp$coefficients, 
+              bp_gap_model = fit_bp_gap$model$coef,
+              sex_gap_model = c(fit_sex_gap$model$coefficients[[1]], 
+                                tau = fit_sex_gap$tau, 
+                                A = fit_sex_gap$A),
+              sex_gap_bounds = c(L = dta$L_, U = dta$U_))
+  
+  # fitted values (life expectancies and gaps)
+  fv  = find_fitted_values(M1 = fit_bp, 
+                           M2 = fit_bp_gap, 
+                           M3 = fit_sex_gap)
+  ov  = find_observed_values(dta)
+  res = cbind(ov[, 1:3], ov[, 4:8] - fv[, 4:8])
+  
+  parts <- list(bp_model = fit_bp, 
+                bp_gap_model = fit_bp_gap, 
+                sex_gap_model = fit_sex_gap)
+  
   # Output object
   out <- structure(class = 'DoubleGap',
-                   list(data_input = input, data = dta, 
-                        bp_model = fit_bp, 
-                        bp_gap_model = fit_bp_gap,
-                        sex_gap_model = fit_sex_gap))
+                   list(data = dta, coefficients = coef, 
+                        fitted.values = fv, observed.values = fv, 
+                        residuals = res, model.parts = parts))
   out$call <- match.call()
   return(out)
 }
+
 
 #' The role of this function is to prepare data in such a way that is ready to use
 #' right away in the other functions. 
 #' @keywords internal
 #' 
-prepare.data <- function(data) {
+prepare_data <- function(data) {
   with(data, {
     input <- c(as.list(environment()))
     
@@ -86,7 +131,7 @@ prepare.data <- function(data) {
     
     ti1 <- years_ - min(years_) + 1
     
-    out <- list(input = input, tab_LT = LT, tab_sex_gap = gap,
+    out <- list(input = input, life.table.data = LT, life.expectancy.data = gap,
                 L_ = L_, U_ = U_, countries = countries, 
                 years = years_, time_index1 = ti1)
     return(out)
@@ -96,8 +141,8 @@ prepare.data <- function(data) {
 #' Find record life expectancy at age x given a set of life tables
 #' @keywords internal
 #' 
-find.record.ex <- function(data) {
-  dta_ <- data$tab_LT
+find_record_ex <- function(data) {
+  dta_ <- data$life.table.data
   tbl  <- data.frame()
   yr   <- sort(unique(dta_$Year))
   for (i in 1:length(yr)) {
@@ -111,11 +156,50 @@ find.record.ex <- function(data) {
   return(out)
 }
 
+#' Find the fitted values of the DoubleGap model
+#' @keywords internal
+#' 
+find_fitted_values <- function(M1, M2, M3) {
+  cntr   <- as.character(M2$modelled_data$country[1])
+  age_   <- as.character(M2$modelled_data$Age[1])
+  years_ <- M2$modelled_data$Year
+  
+  bp_ex  = M1$fitted.values
+  exf    = bp_ex - M2$model$fitted
+  bp_gap = bp_ex - exf
+  
+  dta   <- M3$modelled_data
+  dta2  <- dta[dta$country == cntr, ]
+  dta3  <- data.frame(Intercept = 1, dta2[, 7:9])
+  coef_ <- M3$model$coefficients[[1]]
+  
+  sex_gap = c(NA, NA, apply(dta3, 1, function(x) as.numeric(x) %*% coef_))
+  exm     = exf - sex_gap
+  
+  out <- data.frame(country = cntr, Year = years_, Age = age_, 
+                    exf = exf, exm = exm, sex_gap,
+                    bp_ex = bp_ex, bp_gap = bp_gap)
+  return(out)
+}
+
+#' Find the observed values (from input data). Format.
+#' @keywords internal
+#'
+find_observed_values <- function(x) {
+  A <- x$record.life.expectancy.data
+  B <- x$life.expectancy.data
+  
+  out <- B[B$country == x$input$country, ]
+  out$bp_ex <- A$ex
+  out$bp_gap <- out$bp_ex - out$exf
+  return(out)
+}
+
 #' Fit sex-gap model. This is a modified version of the Raftery linear model
 #' for sex differences in life expectancy. This is kind of a AR(2)-X
 #' sex_gap ~ sex_gap1 + sex_gap2 + narrow_level
 #' @importFrom crch crch
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases coef
 #' @keywords internal
 #' 
 sex_gap.model <- function(data){
@@ -126,7 +210,7 @@ sex_gap.model <- function(data){
   if (is.null(tau)) tau = tauA$tau
   if (is.null(A)) A = tauA$A
   
-  dt_ <- data$tab_sex_gap
+  dt_ <- data$life.expectancy.data
   dt_$sex_gap2 = dt_$sex_gap1 <- NA
   dt_$narrow_level <- pmax(0, dt_$exf - tau)
   
@@ -153,7 +237,7 @@ sex_gap.model <- function(data){
 #' 
 bp_gap.model <- function(data, benchmark, arima.order, drift) {
   
-  dta_c <- data$tab_sex_gap
+  dta_c <- data$life.expectancy.data
   dta_c <- dta_c[dta_c$country == data$input$country, ]
   dta_c$bp_ex  <- benchmark
   dta_c$bp_gap <- dta_c$bp_ex - dta_c$exf
@@ -173,7 +257,7 @@ bp_gap.model <- function(data, benchmark, arima.order, drift) {
 #' 
 find_tau <- function(data, f_ = 1.05) {
   countries <- as.character(data$countries)
-  dta <- data$tab_sex_gap
+  dta <- data$life.expectancy.data
   
   tab <- data.frame(countries, tau = NA, A = NA)
   for (k in 1:length(countries)) {

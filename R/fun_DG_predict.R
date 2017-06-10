@@ -35,7 +35,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D[1, c('sex_gap1', 'sex_gap2')] <- rev(MD[MD$country == data$input$country, 'sex_gap'])[1:2]
     
     # Predict best-practice life expectancy
-    pred_bp     <- as.numeric(predict(m1, data.frame(t_ = forecast_index))) 
+    pred_bp     <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
     # Predict best-practice gap 
     pred_bp_gap <- as.numeric(forecast::forecast(m2$model, h = h_)$mean)
     pred_exf    <- pred_bp - pred_bp_gap 
@@ -69,12 +69,12 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D$exm     <- D$exf - D$sex_gap
     
     cols <- c('country', 'Year', 'Age', 'exf', 
-              'exm', 'bp_ex', 'bp_gap', 'sex_gap')
+              'exm', 'sex_gap', 'bp_ex', 'bp_gap')
     results = D[, cols]
     
     CI <- compute_CI(results, m1, m2, m3, 
                      h = h_, iter, ci, 
-                     cou = object$data_input$country)
+                     cou = data$input$country)
     
     out <- structure(class = 'predict.DoubleGap',
                      list(pred.values = results, 
@@ -87,9 +87,9 @@ predict.DoubleGap <- function(object, last_forecast_year,
 #' @keywords internal
 #' 
 prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
-  m1 = object$bp_model
-  m2 = object$bp_gap_model
-  m3 = object$sex_gap_model
+  m1 = object$model.parts$bp_model
+  m2 = object$model.parts$bp_gap_model
+  m3 = object$model.parts$sex_gap_model
   
   years_ = object$data$years
   fh  <- last_forecast_year - max(years_)
@@ -114,7 +114,7 @@ sim_exf <- function(m1, m2, h_, forecast_index, iter) {
   for (j in 1:iter) {
     sim_bp_gap[, j] <- as.numeric(forecast::simulate.Arima(m2$model, nsim = h_))
   }
-  predicted_bp <- as.numeric(stats::predict(m1, data.frame(t_ = forecast_index)))  
+  predicted_bp <- as.numeric(stats::predict(m1, data.frame(year = forecast_index)))  
   out <- predicted_bp - sim_bp_gap
   return(out)
 }

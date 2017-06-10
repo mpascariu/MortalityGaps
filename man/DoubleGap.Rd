@@ -41,6 +41,30 @@ Fit DoubleGap model
 }
 \examples{
 # Not yet.
+
+rm(list = ls())
+library(DoubleGap)
+
+country = "SWE"
+years = 1950:2014
+
+# Fit model
+dgm <- DoubleGap(LT_female = hmdlt$LTF, 
+                  LT_male = hmdlt$LTM, 
+                  age = 0, 
+                  country = country, 
+                  years = years, 
+                  arima.order = c(2, 1, 1), 
+                  drift = TRUE, 
+                  tau = 75, 
+                  A = 86)
+ls(dgm)
+summary(dgm)
+
+# Predict model ----------------------------------------------
+
+fc_DGM <- predict(dgm, last_forecast_year = 2050, 
+                  iter = 500, ci = c(0.8, 0.95))
 }
 \author{
 Marius Pascariu

@@ -13,14 +13,16 @@ print.DoubleGap <- function(x, ...) {
 #' @export
 #' 
 summary.DoubleGap <- function(object, ...) {
-  C_M1 = summary(object$bp_model)$coefficients
-  C_M2 = object$bp_gap_model$model$coef
-  C_M3 = summary(object$sex_gap_model$model)$coefficients$location
+  C_M1 <- summary(object$model.parts$bp_model)$coefficients
+  C_M2 <- object$model.parts$bp_gap_model$model$coef
+  C_M3 <- summary(object$model.parts$sex_gap_model$model)$coefficients[[1]]
+  coef <- coef(object)
   
   out = structure(class = 'summary.DoubleGap',
                   list(coef_bp_model = C_M1, 
                        coef_bp_gap_model = C_M2,
-                       coef_sex_gap_model = C_M3))
+                       coef_sex_gap_model = C_M3,
+                       coef = coef))
   return(out)
 }
 
@@ -32,10 +34,15 @@ print.summary.DoubleGap <- function(x, ...){
   cat("\nCoefficients Double-Gap Model:\n")
   cat("\nM1: Best-Practice Life Expectancy Model\n")
   printCoefmat(x$coef_bp_model, signif.legend = FALSE)
-  cat("\nM2: Best-Practice Gap Model\n")
+  cat("\nM2: Best-Practice Gap Model (ARIMA)\n")
   print(x$coef_bp_gap_model)
   cat("\nM3: Sex-Gap Model\n")
   printCoefmat(x$coef_sex_gap_model)
+  cat("\ntau =", paste0(x$coef$sex_gap_model['tau']))
+  cat(" | A =", paste0(x$coef$sex_gap_model['A']))
+  cat(" | L =", paste0(x$coef$sex_gap_bounds['L']))
+  cat(" | U =", paste0(x$coef$sex_gap_bounds['U']))
+  
 }
 
 
