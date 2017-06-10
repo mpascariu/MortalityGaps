@@ -27,7 +27,7 @@ HMD_LT_M <- ReadHMD(what = 'LT_m',
 # cnu = countries not used  
 # these are populations that need to be taken out of the dataset
 cnu <- c("FRACNP","DEUTNP", "NZL_NM", "NZL_MA",
-         "GBR_NP","GBRCENW", "GBR_NIR", "CHL", "LUX")
+         "GBR_NP","GBRCENW", "GBR_NIR", "CHL", "LUX", "HRV")
 
 years = 1950:2014
 
