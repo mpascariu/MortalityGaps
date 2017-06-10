@@ -19,37 +19,29 @@
 #' @param A The level of female life expectancy where we assume no further 
 #' change in the sex-gap.
 #' @return A \code{DoubleGap} object
-#' @examples 
-#' # Not yet.
 #' @importFrom stats lm fitted.values
+#' @seealso \code{\link{predict.DoubleGap}}
 #' @author Marius Pascariu
 #' @examples 
-#' 
-#' rm(list = ls())
 #' library(DoubleGap)
 #' 
-#' country = "SWE"
-#' years = 1950:2014
-#' 
 #' # Fit model
-#' dgm <- DoubleGap(LT_female = hmdlt$LTF, 
-#'                   LT_male = hmdlt$LTM, 
-#'                   age = 0, 
-#'                   country = country, 
-#'                   years = years, 
-#'                   arima.order = c(2, 1, 1), 
-#'                   drift = TRUE, 
-#'                   tau = 75, 
-#'                   A = 86)
-#' ls(dgm)
-#' summary(dgm)
+#' fit_model <- DoubleGap(LT_female = hmdlt$LTF, 
+#'                        LT_male = hmdlt$LTM, 
+#'                        age = 0, 
+#'                        country = "SWE", 
+#'                        years = 1950:2014, 
+#'                        arima.order = c(2, 1, 1), 
+#'                        drift = TRUE, 
+#'                        tau = 75, 
+#'                        A = 86)
+#' ls(fit_model)
+#' summary(fit_model)
 #' 
-#' # Predict model ----------------------------------------------
+#' # Predict model 
+#' forecast_model <- predict(fit_model, last_forecast_year = 2050)
 #' 
-#' fc_DGM <- predict(dgm, last_forecast_year = 2050, 
-#'                   iter = 500, ci = c(0.8, 0.95))
 #' @export
-#' 
 DoubleGap <- function(LT_female, LT_male, age = 0, country, years, 
                       arima.order = c(0, 1, 0), drift = FALSE,
                       tau = NULL, A = NULL) {
@@ -61,7 +53,6 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
   # M1: Fit linear model for best practice life expectancy
   year = dta$time_index1
   fit_bp <- lm(dta$record.life.expectancy.data$ex ~ year)
-  
   # M2: Fit best-practice gap model
   fit_bp_gap <- bp_gap.model(data = dta, 
                              benchmark = fitted.values(fit_bp),
@@ -69,6 +60,10 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
                              drift)
   # M3: Fit sex-gap model
   fit_sex_gap <- sex_gap.model(dta)
+  # Model parts - a list containing all the details of the model
+  parts <- list(bp_model = fit_bp, 
+                bp_gap_model = fit_bp_gap, 
+                sex_gap_model = fit_sex_gap)
   
   # coefficients
   coef = list(bp_model = fit_bp$coefficients, 
@@ -78,16 +73,12 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
                                 A = fit_sex_gap$A),
               sex_gap_bounds = c(L = dta$L_, U = dta$U_))
   
-  # fitted values (life expectancies and gaps)
+  # fitted values, observed values and residuals (life expectancies and gaps)
   fv  = find_fitted_values(M1 = fit_bp, 
                            M2 = fit_bp_gap, 
                            M3 = fit_sex_gap)
   ov  = find_observed_values(dta)
   res = cbind(ov[, 1:3], ov[, 4:8] - fv[, 4:8])
-  
-  parts <- list(bp_model = fit_bp, 
-                bp_gap_model = fit_bp_gap, 
-                sex_gap_model = fit_sex_gap)
   
   # Output object
   out <- structure(class = 'DoubleGap',

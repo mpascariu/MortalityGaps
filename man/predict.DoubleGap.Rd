@@ -26,8 +26,8 @@ for females and males (together with prediction intervals).
 \description{
 Predict DoubleGap model
 }
-\examples{
-# Not yet
+\seealso{
+\code{\link{DoubleGap}}
 }
 \author{
 Marius Pascariu

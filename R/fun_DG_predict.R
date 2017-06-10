@@ -9,8 +9,7 @@
 #' @return A list containing predicted value of best-practice
 #' life expectancy, best-practice gap, sex gap, and forecast life expectancy 
 #' for females and males (together with prediction intervals).
-#' @examples 
-#' # Not yet
+#' @seealso \code{\link{DoubleGap}}
 #' @author Marius Pascariu
 #' @export
 #'  
