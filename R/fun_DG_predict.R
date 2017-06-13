@@ -11,6 +11,7 @@
 #' for females and males (together with prediction intervals).
 #' @seealso \code{\link{DoubleGap}}
 #' @author Marius Pascariu
+#' @importFrom forecast forecast Arima simulate.Arima
 #' @export
 #'  
 predict.DoubleGap <- function(object, last_forecast_year, 
@@ -37,7 +38,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     # Predict best-practice life expectancy
     pred_bp     <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
     # Predict best-practice gap 
-    pred_bp_gap <- as.numeric(forecast::forecast(m2$model, h = h_)$mean)
+    pred_bp_gap <- as.numeric(forecast(m2$model, h = h_)$mean)
     pred_exf    <- pred_bp - pred_bp_gap 
     simulated_exf <- sim_exf(m1, m2, h_, forecast_index, iter)
     simulated_sg  <- simulated_exf*0
@@ -72,8 +73,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
               'exm', 'sex_gap', 'bp_ex', 'bp_gap')
     results = D[, cols]
     
-    CI <- compute_CI(results, m1, m2, m3, 
-                     h = h_, iter, ci, 
+    CI <- compute_CI(results, m1, m2, m3, h = h_, iter, ci, 
                      cou = data$input$country)
     
     out <- structure(class = 'predict.DoubleGap',
@@ -105,44 +105,40 @@ prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
 }
 
 #' Simulate female life expectancy (to be used in predict function)
-#' @importFrom stats predict
-#' @importFrom forecast Arima simulate.Arima
 #' @keywords internal
 #' 
 sim_exf <- function(m1, m2, h_, forecast_index, iter) {
   sim_bp_gap <- data.frame(matrix(NA, nrow = h_, ncol = iter))
   for (j in 1:iter) {
-    sim_bp_gap[, j] <- as.numeric(forecast::simulate.Arima(m2$model, nsim = h_))
+    sim_bp_gap[, j] <- as.numeric(simulate.Arima(m2$model, nsim = h_))
   }
-  predicted_bp <- as.numeric(stats::predict(m1, data.frame(year = forecast_index)))  
+  predicted_bp <- as.numeric(predict(m1, data.frame(year = forecast_index)))  
   out <- predicted_bp - sim_bp_gap
   return(out)
 }
 
 #' Function to generate correlated prediction intervals from a mvrnorm
 #' @importFrom MASS mvrnorm
-#' @importFrom stats cov quantile
+#' @importFrom stats cov quantile predict aggregate
 #' @keywords internal
 #' 
 compute_CI <- function(pred_results, m1, m2, m3, h, iter, ci, cou){
-  
   # Raw residuals
-  res1 <- as.numeric(m1$residuals)[-c(1:2)]
-  res2 <- as.numeric(m2$model$residuals)[-c(1:2)]
+  res1  <- as.numeric(m1$residuals)[-c(1:2)]
+  res2  <- as.numeric(m2$model$residuals)[-c(1:2)]
   res3_ <- as.numeric(m3$model$residuals/m3$model$fitted.values$scale[1])
   res3_ <- data.frame(m3$modelled_data, resid = res3_)
-  res3  <-  res3_[res3_$country == cou, 'resid']
+  res3  <- suppressWarnings(aggregate(res3_, 
+           by = list(res3_$Year, res3_$Age), FUN = mean))$resid
   data_resid <- cbind(res1, res2, res3)
-  
-  # Covariance matrix
-  cov_matrix <- stats::cov(data_resid)
   
   # Generate random numbers from multivariate normal distribution 
   # with mean 0 and cov.matrix
+  cov_matrix <- cov(data_resid)
   mat1 = mat2 = mat3 <- matrix(0, nrow = h, ncol = iter)
   for (i in 1:iter) {
-    random.no <- MASS::mvrnorm(n = h, mu = rep(0, nrow(cov_matrix)), 
-                               Sigma = cov_matrix)
+    random.no <- mvrnorm(n = h, mu = rep(0, nrow(cov_matrix)), 
+                         Sigma = cov_matrix)
     mat1[, i] <- cumsum(random.no[, 1])
     mat2[, i] <- cumsum(random.no[, 2])
     mat3[, i] <- cumsum(random.no[, 3])
