@@ -15,6 +15,7 @@
 #'  
 predict.DoubleGap <- function(object, last_forecast_year, 
                               iter = 500, ci = c(0.8, 0.95), ...) {
+  input <- c(as.list(environment())) # save for later use
   x <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
   
   with(x, {
@@ -76,7 +77,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
                      cou = data$input$country)
     
     out <- structure(class = 'predict.DoubleGap',
-                     list(pred.values = results, 
+                     list(input = input, pred.values = results, 
                           pred.intervals = CI))
     return(out)  
   })

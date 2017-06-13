@@ -4,9 +4,10 @@
 #' @export
 #' 
 print.DoubleGap <- function(x, ...) {
-  cat("Fitted Double-Gap Model\n")
-  cat("\nCall:\n")
-  print(x$call)
+  cat("Double-Gap Model fit\n")
+  cat('\nCountry: ', x$data$input$country)
+  cat('\nAge (x): ', x$data$input$age)
+  cat('\nYears in fit: ', paste(range(x$data$years), collapse = ' - '), '\n')
 }
 
 #' @keywords internal
