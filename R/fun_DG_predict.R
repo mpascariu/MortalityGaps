@@ -12,56 +12,62 @@
 #' @seealso \code{\link{DoubleGap}}
 #' @author Marius Pascariu
 #' @importFrom forecast forecast Arima simulate.Arima
+#' @import pbapply
 #' @export
 #'  
 predict.DoubleGap <- function(object, last_forecast_year, 
                               iter = 500, ci = c(0.8, 0.95), ...) {
   input <- c(as.list(environment())) # save for later use
-  x <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
+  pb <- startpb(0, iter) # Start the clock!
+  x  <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
   
   with(x, {
-    data = object$data
-    
-    h_    <- forecast_horizon
-    coef_ <- coef(m3$model)[1:4]
-    D     <- data.frame(matrix(NA, nrow = h_, ncol = ncol(m3$modelled_data)))
-    colnames(D) <- colnames(m3$modelled_data)
-    L = data$L_
-    U = data$U_
-    
-    D$country <- data$input$country
-    D$Year    <- forecast_years
-    D$Age     <- data$input$age
-    MD        <- m3$modelled_data
-    D[1, c('sex_gap1', 'sex_gap2')] <- rev(MD[MD$country == data$input$country, 'sex_gap'])[1:2]
+    data    <- object$data
+    country <- data$input$country
+    L   = data$L_
+    U   = data$U_
+    A   = m3$A
+    tau = m3$tau
     
     # Predict best-practice life expectancy
-    pred_bp     <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
+    pred_bp       <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
     # Predict best-practice gap 
-    pred_bp_gap <- as.numeric(forecast(m2$model, h = h_)$mean)
-    pred_exf    <- pred_bp - pred_bp_gap 
-    simulated_exf <- sim_exf(m1, m2, h_, forecast_index, iter)
+    pred_bp_gap   <- as.numeric(forecast(m2$model, h = forecast_horizon)$mean)
+    pred_exf      <- pred_bp - pred_bp_gap 
+    
+    # Predict sex-gap ----
+    simulated_exf <- sim_exf(m1, m2, forecast_horizon, forecast_index, iter)
+    simulated_tau <- apply(simulated_exf - tau, 2, function(x) pmax(0, x))
     simulated_sg  <- simulated_exf*0
     
-    # Predict sex-gap
+    M3_coef <- coef(m3$model)[1:4]
+    M3_data <- m3$modelled_data[m3$modelled_data$country == country, ]
+    
+    D <- data.frame(matrix(NA, nrow = forecast_horizon, ncol = ncol(M3_data)))
+    colnames(D) <- colnames(M3_data)
+    D$country   <- country
+    D$Year      <- forecast_years
+    D$Age       <- data$input$age
+    D[1, c(7L, 8L)] <- rev(M3_data[, 6L])[1:2]
+    
     for (k in 1:iter) {
       D2 = D
-      D2$exf = simulated_exf[, k]
-      D2$narrow_level = pmax(0, D2$exf - m3$tau)
+      D2[, 4L] <- simulated_exf[, k]
+      D2[, 9L] <- simulated_tau[, k]
       D_ = rbind(D2, 0)
       
       for (i in 1:nrow(D)) {
-        if (D_$exf[i] > m3$A) {gap_ <- D_$sex_gap1[i]} 
-        else {gap_ <- c(1, as.numeric(D_[i, 7:9])) %*% coef_}
-        gap_ <- min(max(gap_, L), U) # check
-        
-        D_$exm[i]          = D_$exf[i] - gap_
-        D_$sex_gap1[i + 1] = D_$sex_gap[i] <- gap_
-        D_$sex_gap2[i + 1] = D_$sex_gap1[i]
+        exf      <- D_[i, 4L]
+        sex_gap1 <- D_[i, 7L]
+        sex_gap0 <- if (exf > A) sex_gap1 else c(1, as.numeric(D_[i, 7L:9L])) %*% M3_coef
+        sex_gap0 <- min(max(sex_gap0, L), U) # check
+        D_[i, c(5L, 6L)]     <- c(exf - sex_gap0, sex_gap0)
+        D_[i + 1, c(7L, 8L)] <- c(sex_gap0, sex_gap1)
       }
-      D__ = D_[1:h_,]
-      simulated_sg[, k] <- D__$sex_gap
+      simulated_sg[, k] <- D_[-nrow(D_), 6L]
+      setpb(pb, k)
     }
+    # -----
     
     D$bp_ex   <- pred_bp
     D$bp_gap  <- pred_bp_gap
@@ -73,12 +79,12 @@ predict.DoubleGap <- function(object, last_forecast_year,
               'exm', 'sex_gap', 'bp_ex', 'bp_gap')
     results = D[, cols]
     
-    CI <- compute_CI(results, m1, m2, m3, h = h_, iter, ci, 
-                     cou = data$input$country)
+    CI <- compute_CI(results, m1, m2, m3, h = forecast_horizon, iter, ci, cou = country)
     
     out <- structure(class = 'predict.DoubleGap',
                      list(input = input, pred.values = results, 
                           pred.intervals = CI))
+    closepb(pb) # Stop clock on exit.
     return(out)  
   })
 }
