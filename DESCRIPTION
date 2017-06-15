@@ -1,7 +1,7 @@
 Package: DoubleGap
 Type: Package
 Title: Double-Gap Life Expectancy Forecasting Model
-Version: 0.0.6
+Version: 0.0.7
 Author: Marius Pascariu
 Maintainer: Marius Pascariu <mpascariu@outlook.com>
 Description: Double-Gap Life Expectancy Forecasting Model.

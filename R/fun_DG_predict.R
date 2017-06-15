@@ -36,10 +36,6 @@ predict.DoubleGap <- function(object, last_forecast_year,
     pred_exf      <- pred_bp - pred_bp_gap 
     
     # Predict sex-gap ----
-    simulated_exf <- sim_exf(m1, m2, forecast_horizon, forecast_index, iter)
-    simulated_tau <- apply(simulated_exf - tau, 2, function(x) pmax(0, x))
-    simulated_sg  <- simulated_exf*0
-    
     M3_coef <- coef(m3$model)[1:4]
     M3_data <- m3$modelled_data[m3$modelled_data$country == country, ]
     
@@ -50,11 +46,12 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D$Age       <- data$input$age
     D[1, c(7L, 8L)] <- rev(M3_data[, 6L])[1:2]
     
+    D2 = D
+    simulated_sg <- matrix(NA, nrow = x$forecast_horizon, ncol = iter)
     for (k in 1:iter) {
-      D2 = D
-      D2[, 4L] <- simulated_exf[, k]
-      D2[, 9L] <- simulated_tau[, k]
-      D_ = rbind(D2, 0)
+      exf_k <- pred_bp - as.numeric(simulate.Arima(m2$model, nsim = forecast_horizon))
+      D2[, c(4L, 9L)] <- cbind(exf_k, pmax(0, exf_k - tau))
+      D_ <- rbind(D2, 0)
       
       for (i in 1:nrow(D)) {
         exf      <- D_[i, 4L]
@@ -74,15 +71,12 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D$sex_gap <- apply(simulated_sg, 1, median)
     D$exf     <- pred_exf
     D$exm     <- D$exf - D$sex_gap
+    D         <- D[, -c(7L, 8L, 9L)]
     
-    cols <- c('country', 'Year', 'Age', 'exf', 
-              'exm', 'sex_gap', 'bp_ex', 'bp_gap')
-    results = D[, cols]
-    
-    CI <- compute_CI(results, m1, m2, m3, h = forecast_horizon, iter, ci, cou = country)
+    CI <- compute_CI(D, m1, m2, m3, forecast_horizon, iter, ci, country)
     
     out <- structure(class = 'predict.DoubleGap',
-                     list(input = input, pred.values = results, 
+                     list(input = input, pred.values = D, 
                           pred.intervals = CI))
     closepb(pb) # Stop clock on exit.
     return(out)  
@@ -107,19 +101,6 @@ prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
               forecast_horizon = fh, forecast_years = fcy, 
               forecast_index = ti2, iter = iter, ci = ci,
               m1 = m1, m2 = m2, m3 = m3)
-  return(out)
-}
-
-#' Simulate female life expectancy (to be used in predict function)
-#' @keywords internal
-#' 
-sim_exf <- function(m1, m2, h_, forecast_index, iter) {
-  sim_bp_gap <- data.frame(matrix(NA, nrow = h_, ncol = iter))
-  for (j in 1:iter) {
-    sim_bp_gap[, j] <- as.numeric(simulate.Arima(m2$model, nsim = h_))
-  }
-  predicted_bp <- as.numeric(predict(m1, data.frame(year = forecast_index)))  
-  out <- predicted_bp - sim_bp_gap
   return(out)
 }
 
