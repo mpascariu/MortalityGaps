@@ -6,7 +6,7 @@
 for sex differences in life expectancy. This is kind of a AR(2)-X
 sex_gap ~ sex_gap1 + sex_gap2 + narrow_level}
 \usage{
-sex_gap.model(data)
+sex_gap.model(data, tau, A)
 }
 \description{
 Fit sex-gap model. This is a modified version of the Raftery linear model

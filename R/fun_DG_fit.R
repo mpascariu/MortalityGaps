@@ -59,7 +59,7 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
                              arima.order,
                              drift)
   # M3: Fit sex-gap model
-  fit_sex_gap <- sex_gap.model(dta)
+  fit_sex_gap <- sex_gap.model(dta, tau, A)
   # Model parts - a list containing all the details of the model
   parts <- list(bp_model = fit_bp, 
                 bp_gap_model = fit_bp_gap, 
@@ -119,15 +119,14 @@ prepare_data <- function(data) {
     gap <- gap[gap$Age == age & gap$Year %in% years_, ]
     gap <- gap[complete.cases(gap), ]
     
-    L_ = 0 
-    U_ = max(gap$sex_gap) # minimum sex-gap observed at age x
+    L_ = min(gap$sex_gap) # minimum sex-gap observed at age x
+    U_ = max(gap$sex_gap) 
     
     ti1 <- years_ - min(years_) + 1
     
     out <- list(record.life.expectancy.data = REX,
                 life.expectancy.data = gap,
-                L_ = L_, U_ = U_,
-                age = age, tau = tau, A = A,
+                L_ = L_, U_ = U_, age = age,
                 country = country,
                 countries = all_countries, 
                 years = years_, time_index1 = ti1)
@@ -198,10 +197,8 @@ find_observed_values <- function(x) {
 #' @importFrom stats complete.cases coef
 #' @keywords internal
 #' 
-sex_gap.model <- function(data){
+sex_gap.model <- function(data, tau, A){
   
-  tau <- data$tau
-  A   <- data$A
   if (is.null(tau) | is.null(A)) tauA = find_tau(data)
   if (is.null(tau)) tau = tauA$tau
   if (is.null(A)) A = tauA$A
