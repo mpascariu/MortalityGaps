@@ -57,6 +57,7 @@ summary(fit_model)
 
 # Predict model 
 forecast_model <- predict(fit_model, last_forecast_year = 2050)
+forecast_model
 
 }
 \seealso{

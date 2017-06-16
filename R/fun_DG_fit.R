@@ -40,6 +40,7 @@
 #' 
 #' # Predict model 
 #' forecast_model <- predict(fit_model, last_forecast_year = 2050)
+#' forecast_model
 #' 
 #' @export
 DoubleGap <- function(LT_female, LT_male, age = 0, country, years, 
@@ -48,7 +49,6 @@ DoubleGap <- function(LT_female, LT_male, age = 0, country, years,
   
   input <- c(as.list(environment())) # save for later use
   dta   <- prepare_data(input) # preliminary data preparation
-  dta$record.life.expectancy.data <- find_record_ex(data = dta)
   
   # M1: Fit linear model for best practice life expectancy
   year = dta$time_index1
@@ -102,15 +102,17 @@ prepare_data <- function(data) {
     ltf_country <- ltf[ltf$country == country & ltf$Age == age & ltf$Year %in% years, ]
     years_ <- sort(ltf_country$Year)
     if (length(years) != length(years_)) {
-      print(paste0(country, ' does not have data for all years. \nThe years vector was adjusted.'))}
+      warning(country, ' does not have data for all the specified years.', 
+              ' The years vector was adjusted.')
+      }
     
     ltm <- data.frame(sex = 'Male', LT_male)
     LT  <- rbind(ltf, ltm)
     LT  <- LT[LT$Age == age & LT$Year %in% years_, ]
     LT  <- LT[complete.cases(LT), ]
+    REX <- find_record_ex(LT)
     
-    countries <- unique(LT$country) 
-    
+    all_countries <- unique(LT$country) 
     cols <- c('country', 'Year', 'Age')
     gap <- data.frame(LT_female[, cols], exf = ltf$ex, exm = ltm$ex,  
                       sex_gap = ltf$ex - ltm$ex)
@@ -122,8 +124,12 @@ prepare_data <- function(data) {
     
     ti1 <- years_ - min(years_) + 1
     
-    out <- list(input = input, life.table.data = LT, life.expectancy.data = gap,
-                L_ = L_, U_ = U_, countries = countries, 
+    out <- list(record.life.expectancy.data = REX,
+                life.expectancy.data = gap,
+                L_ = L_, U_ = U_,
+                age = age, tau = tau, A = A,
+                country = country,
+                countries = all_countries, 
                 years = years_, time_index1 = ti1)
     return(out)
   })
@@ -133,12 +139,11 @@ prepare_data <- function(data) {
 #' @keywords internal
 #' 
 find_record_ex <- function(data) {
-  dta_ <- data$life.table.data
   tbl  <- data.frame()
-  yr   <- sort(unique(dta_$Year))
+  yr   <- sort(unique(data$Year))
   for (i in 1:length(yr)) {
-    record_ex_i <- max(dta_[dta_$Year == yr[i], 'ex'])
-    record_i    <- dta_[dta_$Year == yr[i] & dta_$ex == record_ex_i, ][1, ]
+    record_ex_i <- max(data[data$Year == yr[i], 'ex'])
+    record_i    <- data[data$Year == yr[i] & data$ex == record_ex_i, ][1, ]
     tbl         <- rbind(tbl, record_i)
   }
   cols <- c('country', 'Year', 'sex', 'ex')
@@ -180,7 +185,7 @@ find_observed_values <- function(x) {
   A <- x$record.life.expectancy.data
   B <- x$life.expectancy.data
   
-  out <- B[B$country == x$input$country, ]
+  out <- B[B$country == x$country, ]
   out$bp_ex <- A$ex
   out$bp_gap <- out$bp_ex - out$exf
   return(out)
@@ -195,8 +200,8 @@ find_observed_values <- function(x) {
 #' 
 sex_gap.model <- function(data){
   
-  tau <- data$input$tau
-  A   <- data$input$A
+  tau <- data$tau
+  A   <- data$A
   if (is.null(tau) | is.null(A)) tauA = find_tau(data)
   if (is.null(tau)) tau = tauA$tau
   if (is.null(A)) A = tauA$A
@@ -229,7 +234,7 @@ sex_gap.model <- function(data){
 bp_gap.model <- function(data, benchmark, arima.order, drift) {
   
   dta_c <- data$life.expectancy.data
-  dta_c <- dta_c[dta_c$country == data$input$country, ]
+  dta_c <- dta_c[dta_c$country == data$country, ]
   dta_c$bp_ex  <- benchmark
   dta_c$bp_gap <- dta_c$bp_ex - dta_c$exf
   

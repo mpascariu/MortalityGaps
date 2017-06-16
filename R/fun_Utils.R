@@ -5,8 +5,8 @@
 #' 
 print.DoubleGap <- function(x, ...) {
   cat("Double-Gap Model fit\n")
-  cat('\nCountry: ', x$data$input$country)
-  cat('\nAge (x): ', x$data$input$age)
+  cat('\nCountry: ', x$data$country)
+  cat('\nAge (x): ', x$data$age)
   cat('\nYears in fit: ', paste(range(x$data$years), collapse = ' - '), '\n')
 }
 

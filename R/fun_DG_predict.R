@@ -23,11 +23,11 @@ predict.DoubleGap <- function(object, last_forecast_year,
   
   with(x, {
     data    <- object$data
-    country <- data$input$country
-    L   = data$L_
-    U   = data$U_
-    A   = m3$A
-    tau = m3$tau
+    country = data$country
+    L       = data$L_
+    U       = data$U_
+    A       = m3$A
+    tau     = m3$tau
     
     # Predict best-practice life expectancy
     pred_bp       <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
@@ -43,7 +43,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     colnames(D) <- colnames(M3_data)
     D$country   <- country
     D$Year      <- forecast_years
-    D$Age       <- data$input$age
+    D$Age       <- data$age
     D[1, c(7L, 8L)] <- rev(M3_data[, 6L])[1:2]
     
     D2 = D
