@@ -1,40 +1,39 @@
 
-#' @title Predict DoubleGap model
+#' @title Generic Predict Function for Class \code{\link{DoubleGap}}
+#' 
 #' @description Predict DoubleGap model
 #' @param object A DoubleGap object
 #' @param last_forecast_year Last year to be included in the forecast
 #' @param iter Number of iterations. Default: 500
 #' @param ci Confidence levels. Default: c(0.8, 0.95)
-#' @param ... ...
+#' @param ... Additional arguments affecting the predictions produced.
 #' @return A list containing predicted value of best-practice
 #' life expectancy, best-practice gap, sex gap, and forecast life expectancy 
 #' for females and males (together with prediction intervals).
 #' @seealso \code{\link{DoubleGap}}
-#' @author Marius Pascariu
-#' @importFrom forecast forecast Arima simulate.Arima
-#' @import pbapply
+#' @author Marius D. Pascariu
 #' @export
 #'  
 predict.DoubleGap <- function(object, last_forecast_year, 
                               iter = 500, ci = c(0.8, 0.95), ...) {
   input <- c(as.list(environment())) # save for later use
-  pb <- startpb(0, iter) # Start the clock!
-  x  <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
+  pb    <- startpb(0, iter) # Start the clock!
+  x     <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
   
   with(x, {
     data    <- object$data
-    country = data$country
-    L       = data$L_
-    U       = data$U_
-    A       = m3$A
-    tau     = m3$tau
+    country <- data$country
+    L       <- data$L_
+    U       <- data$U_
+    A       <- m3$A
+    tau     <- m3$tau
     
     # Predict best-practice life expectancy
-    pred_bp       <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
+    pred_bp     <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
     # Predict best-practice gap 
-    pred_bp_gap   <- as.numeric(forecast(m2$model, h = forecast_horizon)$mean)
-    pred_exf      <- pred_bp - pred_bp_gap 
-    
+    pred_bp_gap <- as.numeric(forecast(m2$model, h = forecast_horizon)$mean)
+    pred_exf    <- pred_bp - pred_bp_gap 
+
     # Predict sex-gap ----
     M3_coef <- coef(m3$model)[1:4]
     M3_data <- m3$modelled_data[m3$modelled_data$country == country, ]
@@ -64,7 +63,6 @@ predict.DoubleGap <- function(object, last_forecast_year,
       simulated_sg[, k] <- D_[-nrow(D_), 6L]
       setpb(pb, k)
     }
-    # -----
     
     D$bp_ex   <- pred_bp
     D$bp_gap  <- pred_bp_gap
@@ -72,9 +70,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D$exf     <- pred_exf
     D$exm     <- D$exf - D$sex_gap
     D         <- D[, -c(7L, 8L, 9L)]
-    
-    CI <- compute_CI(D, m1, m2, m3, forecast_horizon, iter, ci, country)
-    
+    CI  <- compute_CI(D, m1, m2, m3, forecast_horizon, iter, ci, country)
     out <- structure(class = 'predict.DoubleGap',
                      list(input = input, pred.values = D, 
                           pred.intervals = CI))
@@ -87,16 +83,14 @@ predict.DoubleGap <- function(object, last_forecast_year,
 #' @keywords internal
 #' 
 prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
-  m1 = object$model.parts$bp_model
-  m2 = object$model.parts$bp_gap_model
-  m3 = object$model.parts$sex_gap_model
-  
-  years_ = object$data$years
-  fh  <- last_forecast_year - max(years_)
-  fcy <- max(years_ + 1):last_forecast_year
-  ti2 <- seq(max(years_) - min(years_) + 2, 
-             length.out = last_forecast_year - max(years_), 
-             by = 1)
+  m1  <- object$model.parts$bp_model
+  m2  <- object$model.parts$bp_gap_model
+  m3  <- object$model.parts$sex_gap_model
+  yr  <- object$data$years
+  fh  <- last_forecast_year - max(yr)
+  fcy <- max(yr + 1):last_forecast_year
+  ti2 <- seq(max(yr) - min(yr) + 2, 
+             length.out = last_forecast_year - max(yr), by = 1)
   out <- list(last_forecast_year = last_forecast_year,
               forecast_horizon = fh, forecast_years = fcy, 
               forecast_index = ti2, iter = iter, ci = ci,
@@ -105,8 +99,6 @@ prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
 }
 
 #' Function to generate correlated prediction intervals from a mvrnorm
-#' @importFrom MASS mvrnorm
-#' @importFrom stats cov quantile predict aggregate
 #' @keywords internal
 #' 
 compute_CI <- function(pred_results, m1, m2, m3, h, iter, ci, cou){
@@ -124,17 +116,16 @@ compute_CI <- function(pred_results, m1, m2, m3, h, iter, ci, cou){
   cov_matrix <- cov(data_resid)
   mat1 = mat2 = mat3 <- matrix(0, nrow = h, ncol = iter)
   for (i in 1:iter) {
-    random.no <- mvrnorm(n = h, mu = rep(0, nrow(cov_matrix)), 
-                         Sigma = cov_matrix)
+    random.no <- mvrnorm(n = h, mu = rep(0, nrow(cov_matrix)), Sigma = cov_matrix)
     mat1[, i] <- cumsum(random.no[, 1])
     mat2[, i] <- cumsum(random.no[, 2])
     mat3[, i] <- cumsum(random.no[, 3])
   }
   # Function to return quantiles
   ci.levels <- sort(c((1 - ci)/2, ci + (1 - ci)/2))
-  fun.ci <- function(x, y = ci.levels) stats::quantile(x, y) 
+  fun.ci    <- function(x, y = ci.levels) stats::quantile(x, y) 
   
-  PR = pred_results
+  PR  <- pred_results
   CI1 <- cbind(median = PR$bp_ex, PR$bp_ex + t(apply(mat1, 1, fun.ci))) 
   CI2 <- cbind(median = PR$bp_gap, PR$bp_gap + t(apply(mat2, 1, fun.ci)))
   CI3 <- cbind(median = PR$sex_gap, PR$sex_gap + t(apply(mat3, 1, fun.ci))) 

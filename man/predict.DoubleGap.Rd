@@ -2,7 +2,7 @@
 % Please edit documentation in R/fun_DG_predict.R
 \name{predict.DoubleGap}
 \alias{predict.DoubleGap}
-\title{Predict DoubleGap model}
+\title{Generic Predict Function for Class \code{\link{DoubleGap}}}
 \usage{
 \method{predict}{DoubleGap}(object, last_forecast_year, iter = 500,
   ci = c(0.8, 0.95), ...)
@@ -16,7 +16,7 @@
 
 \item{ci}{Confidence levels. Default: c(0.8, 0.95)}
 
-\item{...}{...}
+\item{...}{Additional arguments affecting the predictions produced.}
 }
 \value{
 A list containing predicted value of best-practice
@@ -30,5 +30,5 @@ Predict DoubleGap model
 \code{\link{DoubleGap}}
 }
 \author{
-Marius Pascariu
+Marius D. Pascariu
 }

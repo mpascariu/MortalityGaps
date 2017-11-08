@@ -2,15 +2,15 @@
 % Please edit documentation in R/fun_DG_fit.R
 \name{DoubleGap}
 \alias{DoubleGap}
-\title{Fit DoubleGap model}
+\title{Fit the DoubleGap Model}
 \usage{
 DoubleGap(LT_female, LT_male, age = 0, country, years, arima.order = c(0, 1,
   0), drift = FALSE, tau = NULL, A = NULL)
 }
 \arguments{
-\item{LT_female}{Life tables for females}
+\item{LT_female}{Life tables for female population.}
 
-\item{LT_male}{Life tables for males}
+\item{LT_male}{Life tables for male population.}
 
 \item{age}{Age. The life expectancy model will be fitted at the indicated age.}
 
@@ -40,29 +40,29 @@ A \code{DoubleGap} object
 Fit DoubleGap model
 }
 \examples{
-library(DoubleGap)
-
-# Fit model
-fit_model <- DoubleGap(LT_female = hmdlt$LTF, 
-                       LT_male = hmdlt$LTM, 
-                       age = 0, 
-                       country = "SWE", 
-                       years = 1950:2014, 
-                       arima.order = c(2, 1, 1), 
-                       drift = TRUE, 
-                       tau = 75, 
-                       A = 86)
-ls(fit_model)
-summary(fit_model)
+# Fit DG model
+M <- DoubleGap(LT_female = hmdlt$LTF, 
+               LT_male = hmdlt$LTM, 
+               age = 0, 
+               country = "AUS", 
+               years = 1950:2014, 
+               arima.order = c(2, 1, 1), 
+               drift = TRUE, 
+               tau = 75, 
+               A = 86)
+M
+ls(M)
+summary(M)
 
 # Predict model 
-forecast_model <- predict(fit_model, last_forecast_year = 2050)
-forecast_model
+P <- predict(M, last_forecast_year = 2050)
+P
+plot(P)
 
 }
 \seealso{
 \code{\link{predict.DoubleGap}}
 }
 \author{
-Marius Pascariu
+Marius D. Pascariu
 }

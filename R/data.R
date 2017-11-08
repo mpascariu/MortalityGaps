@@ -6,3 +6,15 @@
 #'
 #' @source Human Mortality Database, \url{http://www.mortality.org}.
 "hmdlt"
+
+
+# Imports -----
+
+#' @import graphics 
+#' @import pbapply
+#' @importFrom stats lm fitted.values complete.cases coef median cov quantile 
+#' predict aggregate printCoefmat
+#' @importFrom crch crch
+#' @importFrom forecast forecast Arima simulate.Arima
+#' @importFrom MASS mvrnorm
+NULL

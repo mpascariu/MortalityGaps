@@ -1,20 +1,32 @@
 Package: DoubleGap
 Type: Package
-Title: Double-Gap Life Expectancy Forecasting Model
-Version: 0.0.9
-Author: Marius Pascariu
-Maintainer: Marius Pascariu <mpascariu@outlook.com>
-Description: Double-Gap Life Expectancy Forecasting Model.
+Title: The Double-Gap Life Expectancy Forecasting Model
+Version: 0.1.0
+Authors@R: c(
+  person("Marius D.", "Pascariu", role = c("aut", "cre"), 
+         email = "mpascariu@outlook.com"))
+Maintainer: Marius D. Pascariu <mpascariu@outlook.com>
+Description: Life expectancy is highly correlated over time among countries and 
+  between males and females. These associations can be used to improve forecasts. 
+  Here we have implemented a method for forecasting female life expectancy based on 
+  analysis of the gap between female life expectancy in a country compared with
+  the record level of female life expectancy in the world. Second, to forecast 
+  male life expectancy, the gap between male life expectancy and female life 
+  expectancy in a country is analysed. We named this method the Double-Gap model.
+  For a detailed description of the method see Pascariu et al. (2017) 
+  <doi:10.1016/j.insmatheco.2017.09.011>.
 License: GPL-3
 LazyData: TRUE
 Depends: R (>= 3.1.2)
 Imports:
-      forecast,
-      MASS,
-      crch,
-      pbapply
+  forecast,
+  MASS,
+  crch,
+  pbapply
 Suggests:
-    knitr,
-    rmarkdown
+  knitr,
+  rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
+URL: https://github.com/mpascariu/DoubleGap
+BugReports: https://github.com/mpascariu/DoubleGap/issues
