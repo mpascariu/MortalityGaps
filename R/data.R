@@ -13,8 +13,8 @@
 #' @import graphics 
 #' @import pbapply
 #' @importFrom stats lm fitted.values complete.cases coef median cov quantile 
-#' predict aggregate printCoefmat
+#' predict aggregate printCoefmat simulate
 #' @importFrom crch crch
-#' @importFrom forecast forecast Arima simulate.Arima
+#' @importFrom forecast forecast Arima
 #' @importFrom MASS mvrnorm
 NULL

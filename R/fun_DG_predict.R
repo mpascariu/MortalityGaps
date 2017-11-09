@@ -48,7 +48,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D2 = D
     simulated_sg <- matrix(NA, nrow = x$forecast_horizon, ncol = iter)
     for (k in 1:iter) {
-      exf_k <- pred_bp - as.numeric(simulate.Arima(m2$model, nsim = forecast_horizon))
+      exf_k <- pred_bp - as.numeric(simulate(m2$model, nsim = forecast_horizon))
       D2[, c(4L, 9L)] <- cbind(exf_k, pmax(0, exf_k - tau))
       D_ <- rbind(D2, 0)
       

@@ -1,7 +1,7 @@
 Package: DoubleGap
 Type: Package
 Title: The Double-Gap Life Expectancy Forecasting Model
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
   person("Marius D.", "Pascariu", role = c("aut", "cre"), 
          email = "mpascariu@outlook.com"))

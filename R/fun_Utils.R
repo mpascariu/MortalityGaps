@@ -86,14 +86,17 @@ plot.predict.DoubleGap <- function(x, show.legend = TRUE, ylim = NULL,
   
   # Plot
   if (is.null(ylim)) ylim <- trunc(range(bp_exH) * c(.9, 1.1))
-  breaks_x <- c(min(hyr), round(mean(range(hyr)), -1), max(hyr), max(fyr))
+  breaks_x1 <- c(min(hyr), round(mean(range(hyr)), -1), max(hyr))
+  breaks_x2 <- c(max(hyr) + 0.5, max(fyr))
   breaks_y <- seq(ylim[1], ylim[2], by = 3)
   
-  par(cex.lab = 1.6, cex.axis = 1.6)
+  par(cex.lab = 1.4, cex.axis = 1.5)
   plot(hyr, bp_exH, type = "n", axes = F, asp = asp, ylim = ylim, 
        xlim = range(yr), xlab = xlab, ylab = ylab, ...)
-  axis(1, at = breaks_x, lwd = 3, col = 1, cex.axis = 1.5)
-  axis(2, at = breaks_y, lwd = 3, col = 1, cex.axis = 1.5)
+  axis(1, at = breaks_x1, lwd = 2, col = 1)
+  axis(1, at = breaks_x2, labels = c("", max(breaks_x2)), lwd = 2, col = 4)
+  axis(2, at = breaks_y, lwd = 2, col = 1)
+  
   abline(v = seq(min(hyr), max(fyr), by = 10), col = "grey80", lty = 3)
   abline(h = seq(ylim[1], ylim[2], by = 1.5), col = "grey80", lty = 3)
   
