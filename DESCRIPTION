@@ -1,11 +1,11 @@
-Package: DoubleGap
+Package: MortalityGaps
 Type: Package
 Title: The Double-Gap Life Expectancy Forecasting Model
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: c(
   person("Marius D.", "Pascariu", role = c("aut", "cre"), 
-         email = "mpascariu@outlook.com"))
-Maintainer: Marius D. Pascariu <mpascariu@outlook.com>
+         email = "rpascariu@outlook.com"))
+Maintainer: Marius D. Pascariu <rpascariu@outlook.com>
 Description: Life expectancy is highly correlated over time among countries and 
   between males and females. These associations can be used to improve forecasts. 
   Here we have implemented a method for forecasting female life expectancy based on 
@@ -13,7 +13,7 @@ Description: Life expectancy is highly correlated over time among countries and
   the record level of female life expectancy in the world. Second, to forecast 
   male life expectancy, the gap between male life expectancy and female life 
   expectancy in a country is analysed. We named this method the Double-Gap model.
-  For a detailed description of the method see Pascariu et al. (2017) 
+  For a detailed description of the method see Pascariu et al. (2017). 
   <doi:10.1016/j.insmatheco.2017.09.011>.
 License: GPL-3
 LazyData: TRUE

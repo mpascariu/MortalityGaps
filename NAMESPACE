@@ -3,6 +3,7 @@
 S3method(plot,predict.DoubleGap)
 S3method(predict,DoubleGap)
 S3method(print,DoubleGap)
+S3method(print,MortalityGaps.data)
 S3method(print,predict.DoubleGap)
 S3method(print,summary.DoubleGap)
 S3method(summary,DoubleGap)

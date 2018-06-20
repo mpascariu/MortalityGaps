@@ -34,13 +34,18 @@ years = 1950:2014
 LTF <- HMD_LT_F$data %>% filter(Year %in% years & !(country %in% cnu))
 LTM <- HMD_LT_M$data %>% filter(Year %in% years & !(country %in% cnu))
 
+exF <- LTF %>% filter(Age %in% c(0, 65)) %>% select(country, Year, Age, ex)
+exM <- LTM %>% filter(Age %in% c(0, 65)) %>% select(country, Year, Age, ex)
+
 # verify that the two data.frames are of equal length
-nrow(LTF)
-nrow(LTM)
+nrow(exF) == nrow(exM)
+ncol(exF) == ncol(exM)
 
-hmdlt <- list(LTF = LTF, LTM = LTM)
+MortalityGaps.data <- structure(class = "MortalityGaps.data", 
+                                list(exF = exF, exM = exM))
+  
 
-devtools::use_data(hmdlt)
+devtools::use_data(MortalityGaps.data, overwrite = TRUE)
 
 
 

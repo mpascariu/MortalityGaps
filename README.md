@@ -1,7 +1,13 @@
 # The Double-Gap Forecasting Model (R package)
-[![Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
+[![Linux Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/DoubleGap?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/DoubleGap)
+[![codecov](https://codecov.io/github/mpascariu/DoubleGap/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/DoubleGap)
+[![issues](https://img.shields.io/github/issues-raw/mpascariu/DoubleGap.svg)](https://github.com/mpascariu/DoubleGap/issues)
+[![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/DoubleGap/blob/master/LICENSE)
 
-This repository contains the source code for the Double-Gap model for forecasting life expectancy in different populations. 
+
+This repository contains source code for the Double-Gap model for forecasting 
+life expectancy in human population. 
 
 # Description
 Life expectancy is highly correlated over time among countries and 
@@ -11,20 +17,41 @@ analysis of the gap between female life expectancy in a country compared with
 the record level of female life expectancy in the world. Second, to forecast 
 male life expectancy, the gap between male life expectancy and female life 
 expectancy in a country is analysed. We named this method the Double-Gap model.
-For a detailed description of the method see [Pascariu et al. (2017)](https://doi.org/10.1016/j.insmatheco.2017.09.011). 
+For a detailed description of the method see Pascariu et al. (2017).
 
-# Installation
+## Installation
 
-1. Make sure you have installed the most recent version of R ( https://www.r-project.org )
-2. Install the package in R using **devtools** by running the following code in your R console:
+1. Make sure you have the most recent version of R
+2. Run the following code in your R console 
 
-```r
-if (!requireNamespace("devtools")) install.packages("devtools")
-devtools::install_github("mpascariu/DoubleGap")
+```R
+# Soon to be released in CRAN. Download the GitHub version until then.
+# install.packages("DoubleGap")
 ```
+
+## Updating to the latest version of the package
+
+You can track and contribute to the development of `DoubleGap` on [GitHub](https://github.com/mpascariu/MortalityLaws). To install it:
+
+1. Install the release version of `devtools` from CRAN with `install.packages("devtools")`.
+
+2. Make sure you have a working development environment.
+    * **Windows**: Install [Rtools](https://CRAN.R-project.org/bin/windows/Rtools/).
+    * **Mac**: Install `Xcode` from the Mac App Store.
+    * **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
+
+3. Install the development version of `DoubleGap`.
+
+   ```R
+   devtools::install_github("mpascariu/DoubleGap")
+   ```
 
 # Help
 All functions are documented in the standard way, which means that 
 once you load the package using ```library(DoubleGap)```
 you can just type ```?DoubleGap``` to see the help file. 
+
+## References
+Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics
+Volume 78, January 2018, Pages 339-350.
 
