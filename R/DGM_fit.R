@@ -5,9 +5,15 @@
 #' The table must contain the following 4 columns: country, year, age, ex.
 #' @param DM data.frame containing life expectancy records for males. 
 #' The table must have the same format and dimensions as \code{DF}. 
-#' @param age Age. The life expectancy model will be fitted at the indicated age.
-#' @param country Country. Type: character
-#' @param years Period of time to be used. Type: numeric vector.
+#' @param age Indicate the age for which the model to be fitted. 
+#' Assuming \code{DF} and \code{DM} contain recods for different ages, this 
+#' argument it is used to subset the data. If you want to fit the model for age 0, 
+#' add age = 0. Type: scalar.
+#' @param country Indicate for which contry you want to fit the model. The country
+#' name or code must exist in \code{DF} and \code{DM}.
+#' Type: character
+#' @param years Period of time to be used. 
+#' Type: numeric vector.
 #' @param arima.order A specification of the the ARIMA model to be used in 
 #' fitting the best-practice gap. The ARIMA order is country specific.
 #' The three integer components (p, d, q) are the AR order, 
@@ -47,7 +53,7 @@
 #' plot(P)
 #' 
 #' @export
-DoubleGap <- function(DF, DM, age = 0, country, years, 
+DoubleGap <- function(DF, DM, age, country, years, 
                       arima.order = c(0, 1, 0), drift = FALSE,
                       tau = NULL, A = NULL) {
   
@@ -89,27 +95,38 @@ DoubleGap <- function(DF, DM, age = 0, country, years,
 
 
 #' The role of this function is to prepare data in such a way that is ready to use
-#' right away in the other functions. 
+#' right away in the other functions.
+#' @param data input data from DoubleGap function 
 #' @keywords internal
 #' 
 prepare_data <- function(data) {
   with(data, {
-    # input <- c(as.list(environment()))
-    ltf <- data.frame(sex = 'Female', DF)
-    ltm <- data.frame(sex = 'Male', DM)
-    ltk <- ltf[ltf$country == country & ltf$Age == age & ltf$Year %in% years, ]
+    
+    if (!all(dim(DF) == dim(DM))) {
+      stop("the input data-sets do not have the same dimension.", call. = F)
+    }
+    if (!any(DF$Age %in% age)) {
+      stop("age ", age, " cannot be found in input data.", call. = F)
+    }
+    if (!any(DF$country %in% country)) {
+      stop("country ", country, " cannot be found in input data.", call. = F)
+    }
+    
+    eF <- data.frame(sex = 'Female', DF)
+    eM <- data.frame(sex = 'Male', DM)
+    ltk <- eF[eF$country == country & eF$Age == age & eF$Year %in% years, ]
     yr  <- sort(ltk$Year)
     if (length(years) != length(yr)) {
       warning(country, " does not have data for all the specified years.", 
-              " The 'years' vector was adjusted.")
+              " The 'years' vector has been adjusted.", call. = F)
     }
-    LT   <- rbind(ltf, ltm)
-    LT   <- LT[LT$Age == age & LT$Year %in% yr, ]
-    LT   <- LT[complete.cases(LT), ]
-    REX  <- find_record_ex(LT)
+    eT   <- rbind(eF, eM)
+    eT   <- eT[eT$Age == age & eT$Year %in% yr, ]
+    eT   <- eT[complete.cases(eT), ]
+    REX  <- find_record_ex(eT)
     cols <- c('country', 'Year', 'Age')
-    gap  <- data.frame(DF[, cols], exf = ltf$ex, exm = ltm$ex,  
-                       sex_gap = ltf$ex - ltm$ex)
+    gap  <- data.frame(DF[, cols], exf = eF$ex, exm = eM$ex,  
+                       sex_gap = eF$ex - eM$ex)
     gap  <- gap[gap$Age == age & gap$Year %in% yr, ]
     gap  <- gap[complete.cases(gap), ]
     L_   <- min(gap$sex_gap) # minimum sex-gap observed at age x
@@ -120,21 +137,21 @@ prepare_data <- function(data) {
                 life.expectancy.data = gap,
                 L_ = L_, U_ = U_, age = age,
                 country = country,
-                countries = unique(LT$country), 
+                countries = unique(eT$country), 
                 years = yr, time_index1 = ti1)
     return(out)
   })
 }
 
 #' Find record life expectancy at age x given a set of life tables
+#' @param X Data-set containing ex records for female and male populations. 
 #' @keywords internal
-#' 
-find_record_ex <- function(data) {
+find_record_ex <- function(X) {
   tbl  <- data.frame()
-  yr   <- sort(unique(data$Year))
+  yr   <- sort(unique(X$Year))
   for (i in 1:length(yr)) {
-    record_ex_i <- max(data[data$Year == yr[i], 'ex'])
-    record_i    <- data[data$Year == yr[i] & data$ex == record_ex_i, ][1, ]
+    record_ex_i <- max(X[X$Year == yr[i], 'ex'])
+    record_i    <- X[X$Year == yr[i] & X$ex == record_ex_i, ][1, ]
     tbl         <- rbind(tbl, record_i)
   }
   cols <- c('country', 'Year', 'sex', 'ex')

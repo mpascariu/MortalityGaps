@@ -4,21 +4,27 @@
 \alias{DoubleGap}
 \title{Fit the DoubleGap Model}
 \usage{
-DoubleGap(DF, DM, age = 0, country, years, arima.order = c(0, 1, 0),
+DoubleGap(DF, DM, age, country, years, arima.order = c(0, 1, 0),
   drift = FALSE, tau = NULL, A = NULL)
 }
 \arguments{
-\item{DF}{data.frame containing life expectanacy records for females. 
-The table must contain the following 4 colums: country, year, age, ex.}
+\item{DF}{data.frame containing life expectancy records for females. 
+The table must contain the following 4 columns: country, year, age, ex.}
 
-\item{DM}{data.frame containing life expectanacy records for males. 
+\item{DM}{data.frame containing life expectancy records for males. 
 The table must have the same format and dimensions as \code{DF}.}
 
-\item{age}{Age. The life expectancy model will be fitted at the indicated age.}
+\item{age}{Indicate the age for which the model to be fitted. 
+Assuming \code{DF} and \code{DM} contain recods for different ages, this 
+argument it is used to subset the data. If you want to fit the model for age 0, 
+add age = 0. Type: scalar.}
 
-\item{country}{Country. Type: character}
+\item{country}{Indicate for which contry you want to fit the model. The country
+name or code must exist in \code{DF} and \code{DM}.
+Type: character}
 
-\item{years}{Period of time to be used. Type: numeric vector.}
+\item{years}{Period of time to be used. 
+Type: numeric vector.}
 
 \item{arima.order}{A specification of the the ARIMA model to be used in 
 fitting the best-practice gap. The ARIMA order is country specific.

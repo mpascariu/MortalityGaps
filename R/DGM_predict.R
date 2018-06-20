@@ -33,7 +33,6 @@ predict.DoubleGap <- function(object, last_forecast_year,
     # Predict best-practice gap 
     pred_bp_gap <- as.numeric(forecast(m2$model, h = forecast_horizon)$mean)
     pred_exf    <- pred_bp - pred_bp_gap 
-
     # Predict sex-gap ----
     M3_coef <- coef(m3$model)[1:4]
     M3_data <- m3$modelled_data[m3$modelled_data$country == country, ]
@@ -72,8 +71,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D         <- D[, -c(7L, 8L, 9L)]
     CI  <- compute_CI(D, m1, m2, m3, forecast_horizon, iter, ci, country)
     out <- structure(class = 'predict.DoubleGap',
-                     list(input = input, pred.values = D, 
-                          pred.intervals = CI))
+                     list(input = input, pred.values = D, pred.intervals = CI))
     closepb(pb) # Stop clock on exit.
     return(out)  
   })

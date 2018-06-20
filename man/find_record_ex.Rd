@@ -4,7 +4,10 @@
 \alias{find_record_ex}
 \title{Find record life expectancy at age x given a set of life tables}
 \usage{
-find_record_ex(data)
+find_record_ex(X)
+}
+\arguments{
+\item{X}{Data-set containing ex records for female and male populations.}
 }
 \description{
 Find record life expectancy at age x given a set of life tables
