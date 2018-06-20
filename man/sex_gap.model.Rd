@@ -16,7 +16,7 @@ expected to stop widening and to start narrowing. If \code{NULL}
 then the model will run an algorithm to find it.}
 
 \item{A}{The level of female life expectancy where we assume no further 
-change in the sex-gap.}
+change in the sex-gap. If \code{NULL} the model will estimate it.}
 }
 \description{
 Fit sex-gap model. This is a modified version of the Raftery linear model

@@ -1,9 +1,9 @@
 # The Double-Gap Forecasting Model (R package)
-[![Linux Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/DoubleGap)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/DoubleGap?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/DoubleGap)
-[![codecov](https://codecov.io/github/mpascariu/DoubleGap/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/DoubleGap)
-[![issues](https://img.shields.io/github/issues-raw/mpascariu/DoubleGap.svg)](https://github.com/mpascariu/DoubleGap/issues)
-[![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/DoubleGap/blob/master/LICENSE)
+[![Linux Build Status](https://travis-ci.com/mpascariu/DoubleGap.svg?token=VBqVNpqeEEqqDsXcFpYL&branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
+[![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
+[![issues](https://img.shields.io/github/issues-raw/mpascariu/MortalityGaps.svg)](https://github.com/mpascariu/MortalityGaps/issues)
+[![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/MortalityGaps/blob/master/LICENSE)
 
 
 This repository contains source code for the Double-Gap model for forecasting 
@@ -26,12 +26,12 @@ For a detailed description of the method see Pascariu et al. (2017).
 
 ```R
 # Soon to be released in CRAN. Download the GitHub version until then.
-# install.packages("DoubleGap")
+# install.packages("MortalityGaps")
 ```
 
 ## Updating to the latest version of the package
 
-You can track and contribute to the development of `DoubleGap` on [GitHub](https://github.com/mpascariu/MortalityLaws). To install it:
+You can track and contribute to the development of `MortalityGaps` on [GitHub](https://github.com/mpascariu/MortalityLaws). To install it:
 
 1. Install the release version of `devtools` from CRAN with `install.packages("devtools")`.
 
@@ -40,15 +40,15 @@ You can track and contribute to the development of `DoubleGap` on [GitHub](https
     * **Mac**: Install `Xcode` from the Mac App Store.
     * **Linux**: Install a compiler and various development libraries (details vary across different flavors of Linux).
 
-3. Install the development version of `DoubleGap`.
+3. Install the development version of `MortalityGaps`.
 
    ```R
-   devtools::install_github("mpascariu/DoubleGap")
+   devtools::install_github("mpascariu/MortalityGaps")
    ```
 
 # Help
 All functions are documented in the standard way, which means that 
-once you load the package using ```library(DoubleGap)```
+once you load the package using ```library(MortalityGaps)```
 you can just type ```?DoubleGap``` to see the help file. 
 
 ## References
