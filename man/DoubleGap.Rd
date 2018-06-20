@@ -2,7 +2,7 @@
 % Please edit documentation in R/DGM_fit.R
 \name{DoubleGap}
 \alias{DoubleGap}
-\title{Fit the DoubleGap Model}
+\title{Fit the DoubleGap Life Expectancy Forecasting Model}
 \usage{
 DoubleGap(DF, DM, age, country, years, arima.order = c(0, 1, 0),
   drift = FALSE, tau = NULL, A = NULL)
@@ -21,10 +21,9 @@ add age = 0. Type: scalar.}
 
 \item{country}{Indicate for which contry you want to fit the model. The country
 name or code must exist in \code{DF} and \code{DM}.
-Type: character}
+Type: character.}
 
-\item{years}{Period of time to be used. 
-Type: numeric vector.}
+\item{years}{Period of time to be used. Type: numeric vector.}
 
 \item{arima.order}{A specification of the the ARIMA model to be used in 
 fitting the best-practice gap. The ARIMA order is country specific.
@@ -34,18 +33,36 @@ the degree of differencing, and the MA order.}
 \item{drift}{Indicate whether the ARIMA model should include a linear drift 
 term or not. Type: logical value.}
 
-\item{tau}{The level of female life expectancy at which 
-the sex-gap is expected to stop widening and to start narrowing. If \code{NULL} 
+\item{tau}{The level of female life expectancy at which the sex-gap is 
+expected to stop widening and to start narrowing. If \code{NULL} 
 then the model will run an algorithm to find it.}
 
 \item{A}{The level of female life expectancy where we assume no further 
 change in the sex-gap.}
 }
 \value{
-A \code{DoubleGap} object
+The output is of \code{"DoubleGap"} class with the components:
+
+\item{input}{List with arguments provided in input. Saved for convenience.}
+
+\item{call}{Short information about the model.}
+
+\item{coefficients}{Estimated coefficients.}
+
+\item{fitted.values}{Fitted values of the selected model.}
+
+\item{observed.values}{Country specific observed values.}
+
+\item{model.parts}{Object containing detailed results of the fitted model.}
+
+\item{residuals}{Deviance residuals.}
 }
 \description{
-Fit DoubleGap model
+Fit a DoubleGap model for forecasting life expectancy.
+The method combines separate forecasts to obtain joint male and female 
+life expectancies that are coherent with a best-practice trend. See the entire 
+description and mathematical formulation of the model in 
+\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)}.
 }
 \examples{
 # Fit DG model
@@ -71,6 +88,12 @@ P <- predict(M, last_forecast_year = 2050)
 P
 plot(P)
 
+}
+\references{
+Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. 
+\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{
+The double-gap life expectancy forecasting model.}
+Insurance: Mathematics and Economics Volume 78, January 2018, Pages 339-350.
 }
 \seealso{
 \code{\link{predict.DoubleGap}}

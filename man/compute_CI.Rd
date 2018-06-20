@@ -4,7 +4,24 @@
 \alias{compute_CI}
 \title{Function to generate correlated prediction intervals from a mvrnorm}
 \usage{
-compute_CI(pred_results, m1, m2, m3, h, iter, ci, cou)
+compute_CI(pred_results, M1, M2, M3, h, iter, ci, cou)
+}
+\arguments{
+\item{pred_results}{An object containing predicted values}
+
+\item{M1}{Model 1 - Linear regression bp-life-expectancy.}
+
+\item{M2}{Model 2 - Time-series D-gap.}
+
+\item{M3}{Model 3 - Sex-gap.}
+
+\item{h}{The number of steps ahead for which prediction is required.}
+
+\item{iter}{Number of iterations. Default: 500}
+
+\item{ci}{Confidence levels. Default: c(0.8, 0.95)}
+
+\item{cou}{Country name.}
 }
 \description{
 Function to generate correlated prediction intervals from a mvrnorm

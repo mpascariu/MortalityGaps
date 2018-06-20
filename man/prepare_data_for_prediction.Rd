@@ -6,6 +6,15 @@
 \usage{
 prepare_data_for_prediction(object, last_forecast_year, iter, ci)
 }
+\arguments{
+\item{object}{A DoubleGap object}
+
+\item{last_forecast_year}{Last year to be included in the forecast}
+
+\item{iter}{Number of iterations. Default: 500}
+
+\item{ci}{Confidence levels. Default: c(0.8, 0.95)}
+}
 \description{
 Prepare additional data in order to perform predictions
 }

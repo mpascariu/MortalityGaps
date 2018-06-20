@@ -13,7 +13,6 @@
 #' @seealso \code{\link{DoubleGap}}
 #' @author Marius D. Pascariu
 #' @export
-#'  
 predict.DoubleGap <- function(object, last_forecast_year, 
                               iter = 500, ci = c(0.8, 0.95), ...) {
   input <- c(as.list(environment())) # save for later use
@@ -21,21 +20,21 @@ predict.DoubleGap <- function(object, last_forecast_year,
   x     <- prepare_data_for_prediction(object, last_forecast_year, iter, ci)
   
   with(x, {
-    data    <- object$data
+    data    <- object$input
     country <- data$country
     L       <- data$L_
     U       <- data$U_
-    A       <- m3$A
-    tau     <- m3$tau
+    A       <- M3$A
+    tau     <- M3$tau
     
     # Predict best-practice life expectancy
-    pred_bp     <- as.numeric(predict(m1, data.frame(year = forecast_index))) 
+    pred_bp     <- as.numeric(predict(M1, data.frame(year = forecast_index))) 
     # Predict best-practice gap 
-    pred_bp_gap <- as.numeric(forecast(m2$model, h = forecast_horizon)$mean)
+    pred_bp_gap <- as.numeric(forecast(M2$model, h = forecast_horizon)$mean)
     pred_exf    <- pred_bp - pred_bp_gap 
     # Predict sex-gap ----
-    M3_coef <- coef(m3$model)[1:4]
-    M3_data <- m3$modelled_data[m3$modelled_data$country == country, ]
+    M3_coef <- coef(M3$model)[1:4]
+    M3_data <- M3$modelled_data[M3$modelled_data$country == country, ]
     
     D <- data.frame(matrix(NA, nrow = forecast_horizon, ncol = ncol(M3_data)))
     colnames(D) <- colnames(M3_data)
@@ -47,7 +46,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D2 = D
     simulated_sg <- matrix(NA, nrow = x$forecast_horizon, ncol = iter)
     for (k in 1:iter) {
-      exf_k <- pred_bp - as.numeric(simulate(m2$model, nsim = forecast_horizon))
+      exf_k <- pred_bp - as.numeric(simulate(M2$model, nsim = forecast_horizon))
       D2[, c(4L, 9L)] <- cbind(exf_k, pmax(0, exf_k - tau))
       D_ <- rbind(D2, 0)
       
@@ -69,7 +68,7 @@ predict.DoubleGap <- function(object, last_forecast_year,
     D$exf     <- pred_exf
     D$exm     <- D$exf - D$sex_gap
     D         <- D[, -c(7L, 8L, 9L)]
-    CI  <- compute_CI(D, m1, m2, m3, forecast_horizon, iter, ci, country)
+    CI        <- compute_CI(D, M1, M2, M3, forecast_horizon, iter, ci, country)
     out <- structure(class = 'predict.DoubleGap',
                      list(input = input, pred.values = D, pred.intervals = CI))
     closepb(pb) # Stop clock on exit.
@@ -77,14 +76,15 @@ predict.DoubleGap <- function(object, last_forecast_year,
   })
 }
 
+
 #' Prepare additional data in order to perform predictions
+#' @inheritParams predict.DoubleGap
 #' @keywords internal
-#' 
 prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
-  m1  <- object$model.parts$bp_model
-  m2  <- object$model.parts$bp_gap_model
-  m3  <- object$model.parts$sex_gap_model
-  yr  <- object$data$years
+  M1  <- object$model.parts$bp_model
+  M2  <- object$model.parts$bp_gap_model
+  M3  <- object$model.parts$sex_gap_model
+  yr  <- object$input$years
   fh  <- last_forecast_year - max(yr)
   fcy <- max(yr + 1):last_forecast_year
   ti2 <- seq(max(yr) - min(yr) + 2, 
@@ -92,19 +92,23 @@ prepare_data_for_prediction <- function(object, last_forecast_year, iter, ci) {
   out <- list(last_forecast_year = last_forecast_year,
               forecast_horizon = fh, forecast_years = fcy, 
               forecast_index = ti2, iter = iter, ci = ci,
-              m1 = m1, m2 = m2, m3 = m3)
+              M1 = M1, M2 = M2, M3 = M3)
   return(out)
 }
 
 #' Function to generate correlated prediction intervals from a mvrnorm
+#' @param pred_results An object containing predicted values 
+#' @inheritParams find_fitted_values
+#' @inheritParams predict.DoubleGap
+#' @param h The number of steps ahead for which prediction is required.
+#' @param cou Country name.
 #' @keywords internal
-#' 
-compute_CI <- function(pred_results, m1, m2, m3, h, iter, ci, cou){
+compute_CI <- function(pred_results, M1, M2, M3, h, iter, ci, cou){
   # Raw residuals
-  res1  <- as.numeric(m1$residuals)[-c(1:2)]
-  res2  <- as.numeric(m2$model$residuals)[-c(1:2)]
-  res3_ <- as.numeric(m3$model$residuals/m3$model$fitted.values$scale[1])
-  res3_ <- data.frame(m3$modelled_data, resid = res3_)
+  res1  <- as.numeric(M1$residuals)[-c(1:2)]
+  res2  <- as.numeric(M2$model$residuals)[-c(1:2)]
+  res3_ <- as.numeric(M3$model$residuals/M3$model$fitted.values$scale[1])
+  res3_ <- data.frame(M3$modelled_data, resid = res3_)
   res3  <- suppressWarnings(aggregate(res3_, 
            by = list(res3_$Year, res3_$Age), FUN = mean))$resid
   data_resid <- cbind(res1, res2, res3)
@@ -137,3 +141,15 @@ compute_CI <- function(pred_results, m1, m2, m3, h, iter, ci, cou){
   return(out)
 }
 
+
+#' Print function for predict.DoubleGap
+#' @param x An object of class \code{predict.DoubleGap}.
+#' @inheritParams print.DoubleGap
+#' @keywords internal
+#' @export
+print.predict.DoubleGap <- function(x, ...) {
+  cat("Predicted values generated by the Double-Gap Model\n")
+  cat(paste0("Country: ", x$pred.values$country[1], "\n"))
+  cat(paste0("Age (x): ", x$pred.values$Age[1], "\n\n"))
+  print(x$pred.values[, c(-1, -3)])
+}

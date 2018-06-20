@@ -25,3 +25,6 @@
 \description{
 Generic Plot Function for Class predict.DoubleGap
 }
+\author{
+Marius D. Pascariu
+}

@@ -8,6 +8,7 @@
 #' @param xlab A title for the x axis: see \code{\link{title}}.
 #' @param ylab A title for the y axis: see \code{\link{title}}.
 #' @param ... Further graphical parameters as in \code{\link{par}}. 
+#' @author Marius D. Pascariu
 #' @export
 plot.predict.DoubleGap <- function(x, show.legend = TRUE, ylim = NULL, 
                                    asp = 1.8, xlab = "\nYear", 
@@ -18,14 +19,14 @@ plot.predict.DoubleGap <- function(x, show.legend = TRUE, ylim = NULL,
   bp_exH <- fit$observed.values$bp_ex # Observed record ex
   exfH   <- fit$observed.values$exf
   exmH   <- fit$observed.values$exm
-  hyr    <- fit$data$years # years
+  hyr    <- fit$input$years # years
   
   # Forecast values
   bp_exF <- x$pred.values$bp_ex
-  cif <- x$pred.intervals$exf # confidence intervals females
-  cim <- x$pred.intervals$exm # confidence intervals males
-  fyr <- x$pred.values$Year #years
-  yr  <- c(hyr, fyr) # all years
+  cif    <- x$pred.intervals$exf # confidence intervals females
+  cim    <- x$pred.intervals$exm # confidence intervals males
+  fyr    <- x$pred.values$Year #years
+  yr     <- c(hyr, fyr) # all years
   
   # Plot
   if (is.null(ylim)) ylim <- trunc(range(bp_exH) * c(.9, 1.1))

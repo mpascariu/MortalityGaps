@@ -15,7 +15,7 @@ MortalityGaps.data
 Dataset containing records of life expectancy at birth and at age 65 for 
 female and male populations living in 38 countries between 1950 and 2014.
 The current dataset was used in  
-(\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)} 
+\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)} 
 article. The data-set is provided in the package for testing purposes only. 
 By the time you are using it might be outdated. Download actual 
 demographic data free of charge from Human Mortality Database. 

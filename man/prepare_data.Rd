@@ -8,7 +8,7 @@ right away in the other functions.}
 prepare_data(data)
 }
 \arguments{
-\item{data}{input data from DoubleGap function}
+\item{data}{Input data from DoubleGap function.}
 }
 \description{
 The role of this function is to prepare data in such a way that is ready to use

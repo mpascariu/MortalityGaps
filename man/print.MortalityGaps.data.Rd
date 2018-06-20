@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{A \code{MortalityEstimateData} object.}
 
-\item{...}{Further arguments passed to or from other methods.}
+\item{...}{Further arguments passed to or from other methods}
 }
 \description{
 Print function for HMD4mx data

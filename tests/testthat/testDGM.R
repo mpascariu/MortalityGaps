@@ -18,6 +18,8 @@ M1 <- DoubleGap(DF = exF,
                 A = 86)
 summary(M1)
 M1
+ls(M1)
+M1$model.parts
 
 # Predict model 
 P1 <- predict(M1, last_forecast_year = 2050)
