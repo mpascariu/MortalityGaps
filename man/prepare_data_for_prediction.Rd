@@ -4,12 +4,12 @@
 \alias{prepare_data_for_prediction}
 \title{Prepare additional data in order to perform predictions}
 \usage{
-prepare_data_for_prediction(object, last_forecast_year, iter, ci)
+prepare_data_for_prediction(object, h, iter, ci)
 }
 \arguments{
-\item{object}{A DoubleGap object}
+\item{object}{An object of class \code{DoubleGap}.}
 
-\item{last_forecast_year}{Last year to be included in the forecast}
+\item{h}{Number of periods for forecasting.}
 
 \item{iter}{Number of iterations. Default: 500}
 

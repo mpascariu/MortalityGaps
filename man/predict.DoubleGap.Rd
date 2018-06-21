@@ -4,13 +4,12 @@
 \alias{predict.DoubleGap}
 \title{Generic Predict Function for Class \code{\link{DoubleGap}}}
 \usage{
-\method{predict}{DoubleGap}(object, last_forecast_year, iter = 500,
-  ci = c(0.8, 0.95), ...)
+\method{predict}{DoubleGap}(object, h, iter = 500, ci = c(0.8, 0.95), ...)
 }
 \arguments{
-\item{object}{A DoubleGap object}
+\item{object}{An object of class \code{DoubleGap}.}
 
-\item{last_forecast_year}{Last year to be included in the forecast}
+\item{h}{Number of periods for forecasting.}
 
 \item{iter}{Number of iterations. Default: 500}
 
@@ -25,6 +24,9 @@ for females and males (together with prediction intervals).
 }
 \description{
 Predict DoubleGap model
+}
+\examples{
+# Complete examples are provided in help page of the DoubleGap function.
 }
 \seealso{
 \code{\link{DoubleGap}}

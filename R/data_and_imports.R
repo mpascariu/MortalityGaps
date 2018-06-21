@@ -3,10 +3,10 @@
 
 #' @import graphics 
 #' @import pbapply
-#' @importFrom stats lm fitted.values complete.cases coef median cov quantile 
-#' predict aggregate printCoefmat simulate
+#' @importFrom stats lm fitted.values fitted complete.cases coef median 
+#' cov quantile predict aggregate printCoefmat simulate
 #' @importFrom crch crch
-#' @importFrom forecast forecast Arima
+#' @importFrom forecast forecast Arima arimaorder auto.arima
 #' @importFrom MASS mvrnorm
 NULL
 
@@ -17,13 +17,14 @@ NULL
 #' female and male populations living in 38 countries between 1950 and 2014.
 #' The current dataset was used in  
 #' \href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)} 
-#' article. The data-set is provided in the package for testing purposes only. 
-#' By the time you are using it might be outdated. Download actual 
+#' article. The dataset is provided in the package for testing purposes and to 
+#' ensure the reproducibility of the results and figures published in the article. 
+#' By the time you are using it, it might be outdated. Download actual 
 #' demographic data free of charge from Human Mortality Database. 
 #' Once a username and a password is created on the 
 #' \href{http://www.mortality.org}{website} the 
 #' \href{https://CRAN.R-project.org/package=MortalityLaws}{MortalityLaws} 
-#' R package can be used to extract data directly in your R console.
+#' R package can be used to extract data directly into your R console.
 #' @source \href{http://www.mortality.org}{Human Mortality Database}
 "MortalityGaps.data"
 

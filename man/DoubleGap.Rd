@@ -4,8 +4,8 @@
 \alias{DoubleGap}
 \title{Fit the DoubleGap Life Expectancy Forecasting Model}
 \usage{
-DoubleGap(DF, DM, age, country, years, arima.order = c(0, 1, 0),
-  drift = FALSE, tau = NULL, A = NULL)
+DoubleGap(DF, DM, age, country, years, arima.order = NULL, drift = NULL,
+  tau = NULL, A = NULL)
 }
 \arguments{
 \item{DF}{data.frame containing life expectancy records for females. 
@@ -28,10 +28,13 @@ Type: character.}
 \item{arima.order}{A specification of the the ARIMA model to be used in 
 fitting the best-practice gap. The ARIMA order is country specific.
 The three integer components (p, d, q) are the AR order, 
-the degree of differencing, and the MA order.}
+the degree of differencing, and the MA order. Format: numerical vector of length 3.
+If \code{arima.order = NULL} the function conducts a search over possible models 
+according to AIC. See \code{\link{auto.arima}} for details.}
 
 \item{drift}{Indicate whether the ARIMA model should include a linear drift 
-term or not. Type: logical value.}
+term or not. Type: logical value. If \code{drift = NULL}, it will be estimate 
+automatically.}
 
 \item{tau}{The level of female life expectancy at which the sex-gap is 
 expected to stop widening and to start narrowing. If \code{NULL} 
@@ -65,29 +68,61 @@ description and mathematical formulation of the model in
 \href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)}.
 }
 \examples{
-# Fit DG model
-
+# Input data ------------------------------------
+# Collection of life expectancies for female populations
 exF <- MortalityGaps.data$exF
+# Life expectancy for male populations
 exM <- MortalityGaps.data$exM
 
-M <- DoubleGap(DF = exF, 
-               DM = exM, 
-               age = 0, 
-               country = "AUS", 
-               years = 1950:2014, 
-               arima.order = c(2, 1, 1), 
-               drift = TRUE, 
-               tau = 75, 
-               A = 86)
-M
-ls(M)
-summary(M)
+# Example 1 ----------------------------------------------
+# Fit DG model at age 0 for Australia using data from 1950 to 2014
+M0 <- DoubleGap(DF = exF,
+                DM = exM,
+                age = 0,
+                country = "AUS",
+                years = 1950:2014)
+M0
+summary(M0)
+ls(M0)
 
+# Forecast life expectancy in Australia until 2050
+P0 <- predict(M0, h = 36)
+P0
+# Plot the results
+plot(P0)
+
+# Example 2 ----------------------------------------------
+# Fit DG model at age 0 for Sweden. Provide details about models.
+# Reproduce published results in the article.
+M1 <- DoubleGap(DF = exF, 
+                DM = exM, 
+                age = 0, 
+                country = "SWE", 
+                years = 1950:2014, 
+                arima.order = c(2, 1, 1), 
+                drift = TRUE, 
+                tau = 75, 
+                A = 86)
+summary(M1)
 # Predict model 
-P <- predict(M, last_forecast_year = 2050)
-P
-plot(P)
+P1 <- predict(M1, h = 36)
+plot(P1)
 
+# Example 3 ----------------------------------------------
+# Fit DG model for USA at age 65.
+M2 <- DoubleGap(DF = exF, 
+                DM = exM, 
+                age = 65, 
+                country = "USA", 
+                years = 1950:2014, 
+                arima.order = c(0, 1, 0), 
+                drift = FALSE, 
+                tau = 15, 
+                A = 24)
+summary(M2)
+# Predict model 
+P2 <- predict(M2, h = 36)
+plot(P2)
 }
 \references{
 Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. 

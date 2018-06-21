@@ -20,9 +20,12 @@
 #' @param arima.order A specification of the the ARIMA model to be used in 
 #' fitting the best-practice gap. The ARIMA order is country specific.
 #' The three integer components (p, d, q) are the AR order, 
-#' the degree of differencing, and the MA order. 
+#' the degree of differencing, and the MA order. Format: numerical vector of length 3.
+#' If \code{arima.order = NULL} the function conducts a search over possible models 
+#' according to AIC. See \code{\link{auto.arima}} for details.
 #' @param drift Indicate whether the ARIMA model should include a linear drift 
-#' term or not. Type: logical value.
+#' term or not. Type: logical value. If \code{drift = NULL}, it will be estimate 
+#' automatically.
 #' @param tau The level of female life expectancy at which the sex-gap is 
 #' expected to stop widening and to start narrowing. If \code{NULL} 
 #' then the model will run an algorithm to find it. 
@@ -44,58 +47,88 @@
 #' The double-gap life expectancy forecasting model.}
 #' Insurance: Mathematics and Economics Volume 78, January 2018, Pages 339-350.
 #' @examples 
-#' # Fit DG model
-#' 
+#' # Input data ------------------------------------
+#' # Collection of life expectancies for female populations
 #' exF <- MortalityGaps.data$exF
+#' # Life expectancy for male populations
 #' exM <- MortalityGaps.data$exM
 #' 
-#' M <- DoubleGap(DF = exF, 
-#'                DM = exM, 
-#'                age = 0, 
-#'                country = "AUS", 
-#'                years = 1950:2014, 
-#'                arima.order = c(2, 1, 1), 
-#'                drift = TRUE, 
-#'                tau = 75, 
-#'                A = 86)
-#' M
-#' ls(M)
-#' summary(M)
+#' # Example 1 ----------------------------------------------
+#' # Fit DG model at age 0 for Australia using data from 1950 to 2014
+#' M0 <- DoubleGap(DF = exF,
+#'                 DM = exM,
+#'                 age = 0,
+#'                 country = "AUS",
+#'                 years = 1950:2014)
+#' M0
+#' summary(M0)
+#' ls(M0)
 #' 
+#' # Forecast life expectancy in Australia until 2050
+#' P0 <- predict(M0, h = 36)
+#' P0
+#' # Plot the results
+#' plot(P0)
+#' 
+#' # Example 2 ----------------------------------------------
+#' # Fit DG model at age 0 for Sweden. Provide details about models.
+#' # Reproduce published results in the article.
+#' M1 <- DoubleGap(DF = exF, 
+#'                 DM = exM, 
+#'                 age = 0, 
+#'                 country = "SWE", 
+#'                 years = 1950:2014, 
+#'                 arima.order = c(2, 1, 1), 
+#'                 drift = TRUE, 
+#'                 tau = 75, 
+#'                 A = 86)
+#' summary(M1)
 #' # Predict model 
-#' P <- predict(M, last_forecast_year = 2050)
-#' P
-#' plot(P)
+#' P1 <- predict(M1, h = 36)
+#' plot(P1)
 #' 
+#' # Example 3 ----------------------------------------------
+#' # Fit DG model for USA at age 65.
+#' M2 <- DoubleGap(DF = exF, 
+#'                 DM = exM, 
+#'                 age = 65, 
+#'                 country = "USA", 
+#'                 years = 1950:2014, 
+#'                 arima.order = c(0, 1, 0), 
+#'                 drift = FALSE, 
+#'                 tau = 15, 
+#'                 A = 24)
+#' summary(M2)
+#' # Predict model 
+#' P2 <- predict(M2, h = 36)
+#' plot(P2)
 #' @export
 DoubleGap <- function(DF, DM, age, country, years, 
-                      arima.order = c(0, 1, 0), drift = FALSE,
+                      arima.order = NULL, drift = NULL,
                       tau = NULL, A = NULL) {
   
   input <- c(as.list(environment())) # save for later use
   dta   <- prepare_data(input) # preliminary data preparation
   # M1: Fit linear model for best practice life expectancy
   year   <- dta$time_index1
-  fit_bp <- lm(dta$record.life.expectancy.data$ex ~ year)
+  fit_M1 <- lm(dta$record.life.expectancy.data$ex ~ year)
   # M2: Fit best-practice gap model
-  fit_bp_gap <- bp_gap.model(dta, benchmark = fitted.values(fit_bp),
-                             arima.order, drift)
+  fit_M2 <- bp_gap.model(dta, benchmark = fitted(fit_M1), arima.order, drift)
   # M3: Fit sex-gap model
-  fit_sex_gap <- sex_gap.model(dta, tau, A)
+  fit_M3 <- sex_gap.model(dta, tau, A)
   # Model parts - a list containing all the details of the model
-  parts <- list(bp_model = fit_bp, 
-                bp_gap_model = fit_bp_gap, 
-                sex_gap_model = fit_sex_gap)
+  parts <- list(bp_model = fit_M1, 
+                bp_gap_model = fit_M2, 
+                sex_gap_model = fit_M3)
   # coefficients
-  coef <- list(bp_model = fit_bp$coefficients, 
-               bp_gap_model = fit_bp_gap$model$coef,
-               sex_gap_model = c(fit_sex_gap$model$coefficients[[1]], 
-                                 tau = fit_sex_gap$tau, 
-                                 A = fit_sex_gap$A),
+  coef <- list(bp_model = fit_M1$coefficients, 
+               bp_gap_model = fit_M2$model$coef,
+               sex_gap_model = c(fit_M3$model$coefficients[[1]], 
+                                 tau = fit_M3$tau, A = fit_M3$A),
                sex_gap_bounds = c(L = dta$L_, U = dta$U_))
   
   # fitted values, observed values and residuals (life expectancies and gaps)
-  fv  <- find_fitted_values(M1 = fit_bp, M2 = fit_bp_gap, M3 = fit_sex_gap)
+  fv  <- find_fitted_values(M1 = fit_M1, M2 = fit_M2, M3 = fit_M3)
   ov  <- find_observed_values(dta)
   res <- cbind(ov[, 1:3], ov[, 4:8] - fv[, 4:8])
   
@@ -109,8 +142,8 @@ DoubleGap <- function(DF, DM, age, country, years,
 }
 
 
-#' The role of this function is to prepare data in such a way that is ready to use
-#' right away in the other functions.
+#' The role of this function is to prepare data in such a way that is 
+#' ready to use right away in the other functions.
 #' @param data Input data from DoubleGap function.
 #' @keywords internal
 prepare_data <- function(data) {
@@ -224,19 +257,19 @@ sex_gap.model <- function(X, tau, A){
   
   if (is.null(tau) | is.null(A)) tauA = find_tau(X)
   if (is.null(tau)) tau = tauA$tau
-  if (is.null(A)) A = tauA$A
+  if (is.null(A))   A = tauA$A
   
-  dt_ <- X$life.expectancy.data
-  dt_$sex_gap2     <- dt_$sex_gap1 <- NA
-  dt_$narrow_level <- pmax(0, dt_$exf - tau)
+  W <- X$life.expectancy.data
+  W$sex_gap2     <- W$sex_gap1 <- NA
+  W$narrow_level <- pmax(0, W$exf - tau)
   
   all_countries <- X$countries
   for (i in 1:length(all_countries)) { # identify lag values
     cou <- all_countries[i]
-    dt_[dt_$country == cou, 'sex_gap1'] <- c(NA, rev(rev(dt_[dt_$country == cou, 'sex_gap'])[-1]))
-    dt_[dt_$country == cou, 'sex_gap2'] <- c(NA, NA, rev(rev(dt_[dt_$country == cou, 'sex_gap'])[-(1:2)]))
+    W[W$country == cou, 'sex_gap1'] <- c(NA, rev(rev(W[W$country == cou, 'sex_gap'])[-1]))
+    W[W$country == cou, 'sex_gap2'] <- c(NA, NA, rev(rev(W[W$country == cou, 'sex_gap'])[-(1:2)]))
   }
-  modelled_data <- dt_[complete.cases(dt_), ]
+  modelled_data <- W[complete.cases(W), ]
   
   # Fit the Raftery model using crch package in order to have Gaussian errors
   mdl <- crch::crch(sex_gap ~ sex_gap1 + sex_gap2 + narrow_level, 
@@ -256,6 +289,10 @@ bp_gap.model <- function(X, benchmark, arima.order, drift) {
   Z <- Z[Z$country == X$country, ]
   Z$bp_ex  <- benchmark
   Z$bp_gap <- Z$bp_ex - Z$exf
+  
+  ts_auto = auto.arima(Z$bp_gap)
+  if (is.null(arima.order)) arima.order = arimaorder(ts_auto)
+  if (is.null(drift)) drift = any(names(coef(ts_auto)) %in% "drift")
   
   mdl <- Arima(y = Z$bp_gap, order = arima.order, include.drift = drift)
   out <- list(model = mdl, modelled_data = Z)
@@ -300,10 +337,12 @@ find_tau <- function(X, a = 1.05, f = 0.5) {
 #' @export
 print.DoubleGap <- function(x, ...) {
   cat("Double-Gap Model fit\n")
-  cat('\nCountry: ', x$data$country)
-  cat('\nAge (x): ', x$data$age)
-  cat('\nYears in fit: ', paste(range(x$data$years), collapse = ' - '), '\n')
+  cat("\nCountry     : ", x$input$country)
+  cat("\nAge (x)     : ", x$input$age)
+  cat("\nYears in fit: ", paste(range(x$input$years), collapse = ' - '))
+  cat("\n\n")
 }
+
 
 #' Summary DoubleGap
 #' @param object Object of class \code{DoubleGap}
@@ -340,6 +379,7 @@ print.summary.DoubleGap <- function(x, ...){
   cat(" | A =", paste0(x$coef$sex_gap_model['A']))
   cat(" | L =", round(x$coef$sex_gap_bounds['L'], 2))
   cat(" | U =", round(x$coef$sex_gap_bounds['U'], 2))
+  cat("\n\n")
 }
 
 

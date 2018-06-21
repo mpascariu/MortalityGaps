@@ -9,6 +9,9 @@
 #' @param ylab A title for the y axis: see \code{\link{title}}.
 #' @param ... Further graphical parameters as in \code{\link{par}}. 
 #' @author Marius D. Pascariu
+#' @seealso \code{\link{DoubleGap}}
+#' @examples 
+#' # Complete examples are provided in help page of the DoubleGap function.
 #' @export
 plot.predict.DoubleGap <- function(x, show.legend = TRUE, ylim = NULL, 
                                    asp = 1.8, xlab = "\nYear", 

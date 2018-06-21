@@ -2,8 +2,8 @@
 % Please edit documentation in R/DGM_fit.R
 \name{prepare_data}
 \alias{prepare_data}
-\title{The role of this function is to prepare data in such a way that is ready to use
-right away in the other functions.}
+\title{The role of this function is to prepare data in such a way that is 
+ready to use right away in the other functions.}
 \usage{
 prepare_data(data)
 }
@@ -11,7 +11,7 @@ prepare_data(data)
 \item{data}{Input data from DoubleGap function.}
 }
 \description{
-The role of this function is to prepare data in such a way that is ready to use
-right away in the other functions.
+The role of this function is to prepare data in such a way that is 
+ready to use right away in the other functions.
 }
 \keyword{internal}

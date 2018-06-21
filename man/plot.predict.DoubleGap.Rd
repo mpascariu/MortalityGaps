@@ -25,6 +25,12 @@
 \description{
 Generic Plot Function for Class predict.DoubleGap
 }
+\examples{
+# Complete examples are provided in help page of the DoubleGap function.
+}
+\seealso{
+\code{\link{DoubleGap}}
+}
 \author{
 Marius D. Pascariu
 }
