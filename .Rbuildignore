@@ -7,3 +7,4 @@ LICENSE
 CODE_OF_CONDUCT
 CONTRIBUTING
 ^appveyor\.yml$
+^codecov\.yml$
