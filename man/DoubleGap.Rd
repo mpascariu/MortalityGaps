@@ -85,12 +85,13 @@ M0
 summary(M0)
 ls(M0)
 
-# Forecast life expectancy in Australia until 2050
-P0 <- predict(M0, h = 36)
+# Forecast life expectancy in Australia until 2030
+P0 <- predict(M0, h = 16)
 P0
 # Plot the results
 plot(P0)
 
+\dontrun{
 # Example 2 ----------------------------------------------
 # Fit DG model at age 0 for Sweden. Provide details about models.
 # Reproduce published results in the article.
@@ -123,6 +124,7 @@ summary(M2)
 # Predict model 
 P2 <- predict(M2, h = 36)
 plot(P2)
+}
 }
 \references{
 Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. 
