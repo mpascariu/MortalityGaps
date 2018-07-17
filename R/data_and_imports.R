@@ -15,11 +15,11 @@ NULL
 #'
 #' Dataset containing records of life expectancy at birth and at age 65 for 
 #' female and male populations living in 38 countries between 1950 and 2014.
-#' The current dataset was used in  
+#' This dataset is used in  
 #' \href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)} 
-#' article. The dataset is provided in the package for testing purposes and to 
+#' article. The data is provided in the package for testing purposes and to 
 #' ensure the reproducibility of the results and figures published in the article. 
-#' By the time you are using it, it might be outdated. Download actual 
+#' By the time you are using it, it may be outdated. Download actual 
 #' demographic data free of charge from Human Mortality Database. 
 #' Once a username and a password is created on the 
 #' \href{http://www.mortality.org}{website} the 

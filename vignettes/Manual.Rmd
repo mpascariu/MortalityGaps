@@ -1,13 +1,18 @@
-# The Double-Gap Forecasting Model (R package)
-[![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
-[![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
-[![issues](https://img.shields.io/github/issues-raw/mpascariu/MortalityGaps.svg)](https://github.com/mpascariu/MortalityGaps/issues)
-[![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/MortalityGaps/blob/master/LICENSE)
+---
+title: "MortalityGaps R Package"
+author: "Marius Pascariu"
+date: "`r Sys.Date()`"
+output: rmarkdown::pdf_document
+  # rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette --- DoubleGap R package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
 
+This package contains source code for the Double-Gap model for forecasting 
+life expectancy in human populations.
 
-This repository contains source code for the Double-Gap model for forecasting 
-life expectancy in human population. 
 
 # Description
 Life expectancy is highly correlated over time among countries and 
@@ -50,7 +55,50 @@ All functions are documented in the standard way, which means that
 once you load the package using ```library(MortalityGaps)```
 you can just type ```?DoubleGap``` to see the help file. 
 
-## References
-Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics
-Volume 78, January 2018, Pages 339-350.
+
+# Examples
+
+```{r}
+library(MortalityGaps)
+```
+
+### Input data 
+```{r}
+# Collection of life expectancies for female populations
+exF <- MortalityGaps.data$exF
+# Life expectancy for male populations
+exM <- MortalityGaps.data$exM
+
+head(exF)
+```
+
+
+### Fit DG model at age 0 for Australia using data from 1950 to 2014
+```{r}
+M0 <- DoubleGap(DF = exF,
+                DM = exM,
+                age = 0,
+                country = "AUS",
+                years = 1950:2014)
+M0
+```
+
+### Summary results
+```{r}
+summary(M0)
+```
+
+### Forecast life expectancy in Australia until 2050
+```{r}
+P0 <- predict(M0, h = 36)
+```
+
+### Plot the results
+```{r, fig.asp = 0.9}
+plot(P0)
+```
+
+
+
+
 

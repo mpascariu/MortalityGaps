@@ -1,7 +1,7 @@
 Package: MortalityGaps
 Type: Package
 Title: The Double-Gap Life Expectancy Forecasting Model
-Version: 0.3.1
+Version: 1.0.0
 Authors@R: c(
   person("Marius D.", "Pascariu", role = c("aut", "cre"), 
          email = "rpascariu@outlook.com"))
@@ -30,5 +30,5 @@ Suggests:
   covr
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
-URL: https://github.com/mpascariu/DoubleGap
-BugReports: https://github.com/mpascariu/DoubleGap/issues
+URL: https://github.com/mpascariu/MortalityGaps
+BugReports: https://github.com/mpascariu/MortalityGaps/issues
