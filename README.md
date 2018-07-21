@@ -1,9 +1,13 @@
 # The Double-Gap Forecasting Model (R package)
+[![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityLaws)](https://cran.r-project.org/package=MortalityGaps)
 [![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
 [![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
 [![issues](https://img.shields.io/github/issues-raw/mpascariu/MortalityGaps.svg)](https://github.com/mpascariu/MortalityGaps/issues)
 [![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/MortalityGaps/blob/master/LICENSE)
+[![CRAN_Download_Badge1](https://cranlogs.r-pkg.org/badges/grand-total/MortalityGaps)](https://CRAN.R-project.org/package=MortalityGaps)
+[![CRAN_Download_Badge2](https://cranlogs.r-pkg.org/badges/MortalityGaps)](https://CRAN.R-project.org/package=MortalityGaps)
+
 
 
 This repository contains source code for the Double-Gap model for forecasting 

@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: rmarkdown::pdf_document
   # rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette --- DoubleGap R package}
+  %\VignetteIndexEntry{Vignette --- MortalityGaps R package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
