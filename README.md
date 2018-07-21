@@ -1,5 +1,5 @@
 # The Double-Gap Forecasting Model (R package)
-[![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityLaws)](https://cran.r-project.org/package=MortalityGaps)
+[![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityGaps)](https://cran.r-project.org/package=MortalityGaps)
 [![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
 [![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
