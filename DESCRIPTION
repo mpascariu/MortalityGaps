@@ -23,6 +23,7 @@ Imports:
   crch (>= 1.0-1),
   pbapply (>= 1.3-4)
 Suggests:
+  MortalityLaws,
   knitr,
   rmarkdown,
   testthat,
