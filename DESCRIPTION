@@ -1,11 +1,10 @@
 Package: MortalityGaps
 Type: Package
 Title: The Double-Gap Life Expectancy Forecasting Model
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: c(
   person("Marius D.", "Pascariu", role = c("aut", "cre"), 
          email = "rpascariu@outlook.com"))
-Maintainer: Marius D. Pascariu <rpascariu@outlook.com>
 Description: Life expectancy is highly correlated over time among countries and 
   between males and females. These associations can be used to improve forecasts. 
   Here we have implemented a method for forecasting female life expectancy based on 
@@ -17,12 +16,12 @@ Description: Life expectancy is highly correlated over time among countries and
   <doi:10.1016/j.insmatheco.2017.09.011>.
 License: GPL-3
 LazyData: TRUE
-Depends: R (>= 3.1.2)
+Depends: R (>= 3.4.0)
 Imports:
-  forecast,
-  MASS,
-  crch,
-  pbapply
+  forecast (>= 8.4),
+  MASS (>= 7.3-50),
+  crch (>= 1.0-1),
+  pbapply (>= 1.3-4)
 Suggests:
   knitr,
   rmarkdown,

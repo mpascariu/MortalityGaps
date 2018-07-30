@@ -6,7 +6,7 @@
 \title{DATA - for testing purposes}
 \format{An object of class \code{MortalityGaps.data} of length 2.}
 \source{
-\href{http://www.mortality.org}{Human Mortality Database}
+\href{https://www.mortality.org}{Human Mortality Database}
 }
 \usage{
 MortalityGaps.data
@@ -21,7 +21,7 @@ ensure the reproducibility of the results and figures published in the article.
 By the time you are using it, it may be outdated. Download actual 
 demographic data free of charge from Human Mortality Database. 
 Once a username and a password is created on the 
-\href{http://www.mortality.org}{website} the 
+\href{https://www.mortality.org}{website} the 
 \href{https://CRAN.R-project.org/package=MortalityLaws}{MortalityLaws} 
 R package can be used to extract data directly into your R console.
 }

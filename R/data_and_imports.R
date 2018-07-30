@@ -1,6 +1,17 @@
 
-# Imports -----
+#' onAttach
+#' @description Print a message when the package is loaded first time in R
+#' @param lib lib
+#' @param pkg pkg
+#' @name onAttach
+#' @keywords internal
+".onAttach" <- function(lib, pkg){
+  packageStartupMessage("\nMortalityGaps: The Double-Gap Life Expectancy Forecasting Model",
+                        "\nAuthor       : Marius D. Pascariu",
+                        "\nLast Update  : July 30, 2018\n")
+}
 
+# Imports -----
 #' @import graphics 
 #' @import pbapply
 #' @importFrom stats lm fitted.values fitted complete.cases coef median 
@@ -22,10 +33,10 @@ NULL
 #' By the time you are using it, it may be outdated. Download actual 
 #' demographic data free of charge from Human Mortality Database. 
 #' Once a username and a password is created on the 
-#' \href{http://www.mortality.org}{website} the 
+#' \href{https://www.mortality.org}{website} the 
 #' \href{https://CRAN.R-project.org/package=MortalityLaws}{MortalityLaws} 
 #' R package can be used to extract data directly into your R console.
-#' @source \href{http://www.mortality.org}{Human Mortality Database}
+#' @source \href{https://www.mortality.org}{Human Mortality Database}
 "MortalityGaps.data"
 
 
