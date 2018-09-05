@@ -4,8 +4,8 @@
 \alias{DoubleGap}
 \title{Fit the DoubleGap Life Expectancy Forecasting Model}
 \usage{
-DoubleGap(DF, DM, age, country, years, arima.order = NULL, drift = NULL,
-  tau = NULL, A = NULL)
+DoubleGap(DF, DM, age, country, years, arima.order = NULL,
+  drift = NULL, tau = NULL, A = NULL)
 }
 \arguments{
 \item{DF}{data.frame containing life expectancy records for females. 

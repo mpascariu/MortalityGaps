@@ -5,7 +5,8 @@
 \title{Generic Plot Function for Class predict.DoubleGap}
 \usage{
 \method{plot}{predict.DoubleGap}(x, show.legend = TRUE, ylim = NULL,
-  asp = 1.8, xlab = "\\nYear", ylab = "\\nLife Expectancy Level", ...)
+  asp = 1.8, xlab = "\\nYear", ylab = "\\nLife Expectancy Level",
+  ...)
 }
 \arguments{
 \item{x}{An object of class \code{\link{predict.DoubleGap}}}

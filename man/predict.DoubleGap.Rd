@@ -4,7 +4,8 @@
 \alias{predict.DoubleGap}
 \title{Generic Predict Function for Class \code{\link{DoubleGap}}}
 \usage{
-\method{predict}{DoubleGap}(object, h, iter = 500, ci = c(0.8, 0.95), ...)
+\method{predict}{DoubleGap}(object, h, iter = 500, ci = c(0.8, 0.95),
+  ...)
 }
 \arguments{
 \item{object}{An object of class \code{DoubleGap}.}
