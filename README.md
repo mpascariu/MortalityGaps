@@ -1,4 +1,4 @@
-# <img src="inst/figures/MortalityGaps_logo.png" align="right" width="150" height="150" /> The Double-Gap Forecasting Model
+# <img src="inst/figures/MortalityGaps_logox.png" align="right" width="150" height="150" /> The Double-Gap Forecasting Model
 
 [![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityGaps)](https://cran.r-project.org/package=MortalityGaps)
 [![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
