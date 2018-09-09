@@ -1,4 +1,5 @@
-# The Double-Gap Forecasting Model (R package)
+# <img src="inst/figures/MortalityGaps_logo.png" align="right" width="150" height="150" /> The Double-Gap Forecasting Model
+
 [![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityGaps)](https://cran.r-project.org/package=MortalityGaps)
 [![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
@@ -55,6 +56,5 @@ once you load the package using ```library(MortalityGaps)```
 you can just type ```?DoubleGap``` to see the help file. 
 
 ## References
-Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics
-Volume 78, January 2018, Pages 339-350.
+Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2018. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics Volume 78, Pages 339-350.
 

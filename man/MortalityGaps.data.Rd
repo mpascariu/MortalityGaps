@@ -14,16 +14,19 @@ MortalityGaps.data
 \description{
 Dataset containing records of life expectancy at birth and at age 65 for 
 female and male populations living in 38 countries between 1950 and 2014.
-This dataset is used in  
-\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2018)} 
+This dataset is used in \insertCite{pascariu2018;textual}{MortalityGaps} 
 article. The data is provided in the package for testing purposes and to 
 ensure the reproducibility of the results and figures published in the article. 
-By the time you are using it, it may be outdated. Download actual 
-demographic data free of charge from Human Mortality Database. 
+By the time you are using this package, the data might be outdated. Download actual 
+demographic data free of charge from \insertCite{hmd2017;textual}{MortalityGaps}. 
 Once a username and a password is created on the 
-\href{https://www.mortality.org}{website} the 
-\href{https://CRAN.R-project.org/package=MortalityLaws}{MortalityLaws} 
+\href{https://www.mortality.org}{website} the
+\href{https://CRAN.R-project.org/package=MortalityLaws}{MortalityLaws}
 R package can be used to extract data directly into your R console.
+\insertNoCite{MortalityLaws160;textual}{MortalityGaps}
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 \code{\link[MortalityLaws]{ReadHMD}}

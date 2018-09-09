@@ -2,7 +2,7 @@
 % Please edit documentation in R/DGM_fit.R
 \name{find_fitted_values}
 \alias{find_fitted_values}
-\title{Find the fitted values of the DoubleGap model}
+\title{Find the fitted values of the Double-Gap model}
 \usage{
 find_fitted_values(M1, M2, M3)
 }
@@ -14,6 +14,6 @@ find_fitted_values(M1, M2, M3)
 \item{M3}{Model 3 - Sex-gap.}
 }
 \description{
-Find the fitted values of the DoubleGap model
+Find the fitted values of the Double-Gap model
 }
 \keyword{internal}

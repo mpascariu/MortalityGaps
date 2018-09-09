@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{Object of class \code{DoubleGap}}
 
-\item{...}{further arguments passed to or from other methods.}
+\item{...}{Further arguments passed to or from other methods.}
 }
 \description{
 Summary DoubleGap

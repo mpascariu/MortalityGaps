@@ -12,8 +12,16 @@ Life expectancy is highly correlated over time among countries and
   the record level of female life expectancy in the world. Second, to forecast 
   male life expectancy, the gap between male life expectancy and female life 
   expectancy in a country is analysed. We named this method the Double-Gap model.
-  For a detailed description of the method see Pascariu et al. (2017). 
+  For a detailed description of the method see Pascariu et al. (2018). 
   <doi:10.1016/j.insmatheco.2017.09.011>.
+}
+\details{
+To learn more about the package, start with the vignettes:
+\code{browseVignettes(package = "MortalityGaps")}
+\insertNoCite{*}{MortalityGaps}
+}
+\references{
+\insertAllCited{}
 }
 \seealso{
 Useful links:

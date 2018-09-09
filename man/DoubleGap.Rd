@@ -2,7 +2,7 @@
 % Please edit documentation in R/DGM_fit.R
 \name{DoubleGap}
 \alias{DoubleGap}
-\title{Fit the DoubleGap Life Expectancy Forecasting Model}
+\title{Fit the Double-Gap Life Expectancy Forecasting Model}
 \usage{
 DoubleGap(DF, DM, age, country, years, arima.order = NULL,
   drift = NULL, tau = NULL, A = NULL)
@@ -15,11 +15,11 @@ The table must contain the following 4 columns: country, year, age, ex.}
 The table must have the same format and dimensions as \code{DF}.}
 
 \item{age}{Indicate the age for which the model to be fitted. 
-Assuming \code{DF} and \code{DM} contain recods for different ages, this 
+Assuming \code{DF} and \code{DM} contain records for different ages, this 
 argument it is used to subset the data. If you want to fit the model for age 0, 
 add age = 0. Type: scalar.}
 
-\item{country}{Indicate for which contry you want to fit the model. The country
+\item{country}{Indicate for which country you want to fit the model. The country
 name or code must exist in \code{DF} and \code{DM}.
 Type: character.}
 
@@ -44,28 +44,25 @@ then the model will run an algorithm to find it.}
 change in the sex-gap. If \code{NULL} the model will estimate it.}
 }
 \value{
-The output is of \code{"DoubleGap"} class with the components:
-
-\item{input}{List with arguments provided in input. Saved for convenience.}
-
-\item{call}{Short information about the model.}
-
-\item{coefficients}{Estimated coefficients.}
-
-\item{fitted.values}{Fitted values of the selected model.}
-
-\item{observed.values}{Country specific observed values.}
-
-\item{model.parts}{Object containing detailed results of the fitted model.}
-
-\item{residuals}{Deviance residuals.}
+The output is of class \code{DoubleGap} with the components:
+ \item{input}{List with arguments provided in input. Saved for convenience.}
+ \item{call}{An unevaluated function call, that is, an unevaluated 
+expression which consists of the named function applied to the given arguments.}
+ \item{coefficients}{Estimated coefficients.}
+ \item{fitted.values}{Fitted values of the selected model.}
+ \item{observed.values}{Country specific observed values obtained from input data. 
+ This is a \code{data.frame} containing information about female, male and 
+ best-practice life expectancy measures over time, together with associated gaps 
+ in life expectancy.}
+ \item{model.parts}{Object containing detailed results of the fitted model.} 
+ \item{residuals}{Deviance residuals.}
 }
 \description{
-Fit a DoubleGap model for forecasting life expectancy.
+Fit a Double-Gap model for forecasting life expectancy.
 The method combines separate forecasts to obtain joint male and female 
 life expectancies that are coherent with a best-practice trend. See the entire 
 description and mathematical formulation of the model in 
-\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)}.
+\insertCite{pascariu2018;textual}{MortalityGaps}
 }
 \examples{
 # Input data ------------------------------------
@@ -127,10 +124,7 @@ plot(P2)
 }
 }
 \references{
-Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. 
-\href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{
-The double-gap life expectancy forecasting model.}
-Insurance: Mathematics and Economics Volume 78, January 2018, Pages 339-350.
+\insertAllCited{}
 }
 \seealso{
 \code{\link{predict.DoubleGap}}

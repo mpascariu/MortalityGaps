@@ -1,19 +1,19 @@
 
-#' @title Fit the DoubleGap Life Expectancy Forecasting Model 
-#' @description Fit a DoubleGap model for forecasting life expectancy.
+#' @title Fit the Double-Gap Life Expectancy Forecasting Model 
+#' @description Fit a Double-Gap model for forecasting life expectancy.
 #' The method combines separate forecasts to obtain joint male and female 
 #' life expectancies that are coherent with a best-practice trend. See the entire 
 #' description and mathematical formulation of the model in 
-#' \href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{Pascariu et. al (2017)}. 
+#' \insertCite{pascariu2018;textual}{MortalityGaps} 
 #' @param DF data.frame containing life expectancy records for females. 
 #' The table must contain the following 4 columns: country, year, age, ex.
 #' @param DM data.frame containing life expectancy records for males. 
 #' The table must have the same format and dimensions as \code{DF}. 
 #' @param age Indicate the age for which the model to be fitted. 
-#' Assuming \code{DF} and \code{DM} contain recods for different ages, this 
+#' Assuming \code{DF} and \code{DM} contain records for different ages, this 
 #' argument it is used to subset the data. If you want to fit the model for age 0, 
 #' add age = 0. Type: scalar.
-#' @param country Indicate for which contry you want to fit the model. The country
+#' @param country Indicate for which country you want to fit the model. The country
 #' name or code must exist in \code{DF} and \code{DM}.
 #' Type: character.
 #' @param years Period of time to be used. Type: numeric vector.
@@ -31,21 +31,21 @@
 #' then the model will run an algorithm to find it. 
 #' @param A The level of female life expectancy where we assume no further 
 #' change in the sex-gap. If \code{NULL} the model will estimate it. 
-#' @return The output is of \code{"DoubleGap"} class with the components:
-#' @return \item{input}{List with arguments provided in input. Saved for convenience.}
-#' @return \item{call}{Short information about the model.}
-#' @return \item{coefficients}{Estimated coefficients.}
-#' @return \item{fitted.values}{Fitted values of the selected model.}
-#' @return \item{observed.values}{Country specific observed values.}
-#' @return \item{model.parts}{Object containing detailed results of the fitted model.} 
-#' @return \item{residuals}{Deviance residuals.} 
+#' @return The output is of class \code{DoubleGap} with the components:
+#'  \item{input}{List with arguments provided in input. Saved for convenience.}
+#'  \item{call}{An unevaluated function call, that is, an unevaluated 
+#' expression which consists of the named function applied to the given arguments.}
+#'  \item{coefficients}{Estimated coefficients.}
+#'  \item{fitted.values}{Fitted values of the selected model.}
+#'  \item{observed.values}{Country specific observed values obtained from input data. 
+#'  This is a \code{data.frame} containing information about female, male and 
+#'  best-practice life expectancy measures over time, together with associated gaps 
+#'  in life expectancy.}
+#'  \item{model.parts}{Object containing detailed results of the fitted model.} 
+#'  \item{residuals}{Deviance residuals.} 
 #' @seealso \code{\link{predict.DoubleGap}}
 #' @author Marius D. Pascariu
-#' @references 
-#' Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2017. 
-#' \href{https://doi.org/10.1016/j.insmatheco.2017.09.011}{
-#' The double-gap life expectancy forecasting model.}
-#' Insurance: Mathematics and Economics Volume 78, January 2018, Pages 339-350.
+#' @references \insertAllCited{}
 #' @examples 
 #' # Input data ------------------------------------
 #' # Collection of life expectancies for female populations
@@ -210,7 +210,7 @@ find_record_ex <- function(X) {
 }
 
 
-#' Find the fitted values of the DoubleGap model
+#' Find the fitted values of the Double-Gap model
 #' @param M1 Model 1 - Linear regression bp-life-expectancy.
 #' @param M2 Model 2 - Time-series D-gap.
 #' @param M3 Model 3 - Sex-gap.
@@ -334,7 +334,7 @@ find_tau <- function(X, a = 1.05, f = 0.5) {
 
 #' Print DoubleGap
 #' @param x Object of class \code{DoubleGap}.
-#' @param ... further arguments passed to or from other methods.
+#' @param ... Further arguments passed to or from other methods.
 #' @keywords internal
 #' @export
 print.DoubleGap <- function(x, ...) {
@@ -383,6 +383,5 @@ print.summary.DoubleGap <- function(x, ...){
   cat(" | U =", round(x$coef$sex_gap_bounds['U'], 2))
   cat("\n\n")
 }
-
 
 
