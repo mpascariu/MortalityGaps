@@ -59,3 +59,6 @@ you can just type ```?DoubleGap``` to see the help file.
 ## References
 Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2018. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics Volume 78, Pages 339-350.
 
+## Support
+<a href="https://www.buymeacoffee.com/rpascariu" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 100px !important;" ></a>
+
