@@ -1,8 +1,7 @@
 # <img src="inst/figures/MortalityGaps_logox.png" align="right" width="150" height="150" /> The Double-Gap Forecasting Model
 
 [![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityGaps)](https://cran.r-project.org/package=MortalityGaps)
-[![Linux Build Status](https://travis-ci.com/mpascariu/MortalityGaps.svg?branch=master)](https://travis-ci.com/mpascariu/MortalityGaps)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mpascariu/MortalityGaps?branch=master&svg=true)](https://ci.appveyor.com/project/mpascariu/MortalityGaps)
+[![R-CMD-check](https://github.com/mpascariu/MortalityGaps/workflows/R-CMD-check/badge.svg)](https://github.com/mpascariu/MortalityGaps/actions)
 [![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
 [![issues](https://img.shields.io/github/issues-raw/mpascariu/MortalityGaps.svg)](https://github.com/mpascariu/MortalityGaps/issues)
 

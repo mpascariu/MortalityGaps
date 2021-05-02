@@ -9,3 +9,4 @@ CONTRIBUTING
 ^appveyor\.yml$
 ^codecov\.yml$
 ^\.httr-oauth$
+^\.github$
