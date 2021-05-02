@@ -1,7 +1,7 @@
 Package: MortalityGaps
 Type: Package
 Title: The Double-Gap Life Expectancy Forecasting Model
-Version: 1.0.5
+Version: 1.0.6
 Authors@R: c(person("Marius D.", "Pascariu", role = c("aut", "cre"), email = "rpascariu@outlook.com", comment = c(ORCID = "0000-0002-2568-6489")))
 Description: Life expectancy is highly correlated over time among countries and 
   between males and females. These associations can be used to improve forecasts. 
@@ -29,7 +29,7 @@ Suggests:
   covr (>= 3.1.0)
 RdMacros: 
   Rdpack
-RoxygenNote: 6.1.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/mpascariu/MortalityGaps
 BugReports: https://github.com/mpascariu/MortalityGaps/issues
