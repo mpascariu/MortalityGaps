@@ -1,3 +1,7 @@
+# ------------------------------------------------- #
+# Author: Marius D. Pascariu
+# Last update: Wed Apr  2 07:24:07 2025
+# ------------------------------------------------- #
 
 #' Generic Plot Function for Class predict.DoubleGap
 #' 
@@ -5,9 +9,9 @@
 #' @param show.legend Logical. Indicate whether to display the legend or not. Default: TRUE.
 #' @param ylim Numeric vectors of length 2, giving the x and y coordinates ranges.
 #' @param asp Numeric, giving the aspect ratio y/x.
-#' @param xlab A title for the x axis: see \code{\link{title}}.
-#' @param ylab A title for the y axis: see \code{\link{title}}.
-#' @param ... Further graphical parameters as in \code{\link{par}}. 
+#' @param xlab A title for the x axis: see \code{\link[graphics]{title}}.
+#' @param ylab A title for the y axis: see \code{\link[graphics]{title}}.
+#' @param ... Further graphical parameters as in \code{\link[graphics]{par}}. 
 #' @author Marius D. Pascariu
 #' @seealso \code{\link{DoubleGap}}
 #' @examples 

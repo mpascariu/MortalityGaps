@@ -4,9 +4,15 @@
 \alias{plot.predict.DoubleGap}
 \title{Generic Plot Function for Class predict.DoubleGap}
 \usage{
-\method{plot}{predict.DoubleGap}(x, show.legend = TRUE, ylim = NULL,
-  asp = 1.8, xlab = "\\nYear", ylab = "\\nLife Expectancy Level",
-  ...)
+\method{plot}{predict.DoubleGap}(
+  x,
+  show.legend = TRUE,
+  ylim = NULL,
+  asp = 1.8,
+  xlab = "\\nYear",
+  ylab = "\\nLife Expectancy Level",
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{\link{predict.DoubleGap}}}
@@ -17,11 +23,11 @@
 
 \item{asp}{Numeric, giving the aspect ratio y/x.}
 
-\item{xlab}{A title for the x axis: see \code{\link{title}}.}
+\item{xlab}{A title for the x axis: see \code{\link[graphics]{title}}.}
 
-\item{ylab}{A title for the y axis: see \code{\link{title}}.}
+\item{ylab}{A title for the y axis: see \code{\link[graphics]{title}}.}
 
-\item{...}{Further graphical parameters as in \code{\link{par}}.}
+\item{...}{Further graphical parameters as in \code{\link[graphics]{par}}.}
 }
 \description{
 Generic Plot Function for Class predict.DoubleGap

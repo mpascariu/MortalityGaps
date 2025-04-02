@@ -1,3 +1,7 @@
+# ------------------------------------------------- #
+# Author: Marius D. Pascariu
+# Last update: Wed Apr  2 07:34:37 2025
+# ------------------------------------------------- #
 
 # MortalityGaps: The Double-Gap Life Expectancy Forecasting Model
 
@@ -12,6 +16,7 @@
 #' cov quantile predict aggregate printCoefmat simulate
 #' @importFrom pbapply startpb setpb closepb
 #' @importFrom graphics abline axis legend lines par plot points polygon
+#' @importFrom Rdpack Rdo_macro
 #' @references \insertAllCited{}
 #' @name MortalityGaps
 #' @aliases NULL

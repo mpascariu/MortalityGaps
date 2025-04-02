@@ -2,7 +2,7 @@
 
 [![CRAN_Version](https://www.r-pkg.org/badges/version/MortalityGaps)](https://cran.r-project.org/package=MortalityGaps)
 [![R-CMD-check](https://github.com/mpascariu/MortalityGaps/workflows/R-CMD-check/badge.svg)](https://github.com/mpascariu/MortalityGaps/actions)
-[![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://codecov.io/github/mpascariu/MortalityGaps)
+[![codecov](https://codecov.io/github/mpascariu/MortalityGaps/branch/master/graphs/badge.svg)](https://app.codecov.io/github/mpascariu/MortalityGaps)
 [![issues](https://img.shields.io/github/issues-raw/mpascariu/MortalityGaps.svg)](https://github.com/mpascariu/MortalityGaps/issues)
 
 [![license](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://github.com/mpascariu/MortalityGaps/blob/master/LICENSE)
@@ -57,7 +57,3 @@ you can just type ```?DoubleGap``` to see the help file.
 
 ## References
 Pascariu M.D., Canudas-Romo V. and Vaupel W.J. 2018. [The double-gap life expectancy forecasting model.](https://doi.org/10.1016/j.insmatheco.2017.09.011) Insurance: Mathematics and Economics Volume 78, Pages 339-350.
-
-## Support
-<a href="https://www.buymeacoffee.com/rpascariu" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 100px !important;" ></a>
-

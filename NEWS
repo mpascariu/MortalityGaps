@@ -1,2 +1,5 @@
+version 1.0.7:
+- make it a better citizen: rearrange files, namespace, dependencies, links.
+
 version 1.0.0:
 - First stable version (on CRAN).

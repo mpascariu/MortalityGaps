@@ -4,7 +4,9 @@
 \name{MortalityGaps.data}
 \alias{MortalityGaps.data}
 \title{DATA - for testing purposes}
-\format{An object of class \code{MortalityGaps.data} of length 2.}
+\format{
+An object of class \code{MortalityGaps.data} of length 2.
+}
 \source{
 \href{https://www.mortality.org}{Human Mortality Database}
 }

@@ -1,3 +1,7 @@
+# ------------------------------------------------- #
+# Author: Marius D. Pascariu
+# Last update: Wed Apr  2 07:19:24 2025
+# ------------------------------------------------- #
 
 #' @title Fit the Double-Gap Life Expectancy Forecasting Model 
 #' @description Fit a Double-Gap model for forecasting life expectancy.
@@ -22,7 +26,7 @@
 #' The three integer components (p, d, q) are the AR order, 
 #' the degree of differencing, and the MA order. Format: numerical vector of length 3.
 #' If \code{arima.order = NULL} the function conducts a search over possible models 
-#' according to AIC. See \code{\link{auto.arima}} for details.
+#' according to AIC. See \code{\link[forecast]{auto.arima}} for details.
 #' @param drift Indicate whether the ARIMA model should include a linear drift 
 #' term or not. Type: logical value. If \code{drift = NULL}, it will be estimate 
 #' automatically.
